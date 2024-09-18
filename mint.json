@@ -29,6 +29,10 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Content",
+      "url": "content"
     }
   ],
   "anchors": [
@@ -58,6 +62,12 @@
       ]
     },
     {
+      "group": "Docs",
+      "pages": [
+        "docs/backend_setup_guide"
+      ]
+    },
+    {
       "group": "Essentials",
       "pages": [
         "essentials/markdown",
@@ -72,6 +82,12 @@
       "group": "API Documentation",
       "pages": [
         "api-reference/introduction"
+      ]
+    },
+    {
+      "group": "Content",
+      "pages": [
+        "content/abc"
       ]
     },
     {

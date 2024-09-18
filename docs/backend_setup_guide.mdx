@@ -1,0 +1,137 @@
+---
+id: id-setup-guide
+title: Backend Project Setup Guide
+sidebar_label: Backend Project Setup Guide
+---
+
+## Introduction
+
+This guide will walk you through setting up an **"backend"** Django project that you’ve to clone from GitHub. We’ll cover cloning the repository, setting up a virtual environment, installing dependencies, superuser creation, running project and Test Cases.
+
+- **Note:-** Contact **Yechiel G(yechielg@clavaa.com)** to get access to the **"backend"** repository.
+
+## Prerequisites
+
+- **Python 3.11.1**: Ensure Python 3.11.1 is installed on your system. You can download it from **python.org**.
+- **pip**: Python's package installer should be installed. It comes with Python versions 3.4 and later.
+- **Virtual environment**: We’ll use virtual environment to isolate project dependencies.
+- **Command**: **"pip install virtualenv"**.
+
+### Clone backend repository once Access Granted 
+
+#### Clone the Repository
+
+Open your terminal or command prompt and navigate to the directory where you want to clone the project:
+
+#### Command:
+
+- **git clone https://github.com/Clavaa/backend.git**
+
+- **Note:-** Follow **"Develop"** branch.
+
+Navigate to **"backend"** directory.
+
+#### Command:
+
+- **cd backend**
+
+## Set Up the Development Environment
+
+### Create and Activate a Virtual Environment
+
+Create a virtual environment to manage project dependencies:
+
+**Note:-** Place virtual environment outside of repository directory.
+
+#### Command:
+
+- **virtualenv venv**
+
+Activate the virtual environment:
+
+On Windows:
+
+#### Command:
+
+- **venv\Scripts\activate**
+
+On macOS/Linux:
+
+#### Command:
+
+- **source venv/bin/activate**
+
+### Install Project Dependencies
+
+Install the dependencies listed in requirements.txt.
+
+#### Command:
+
+- **pip install -r requirements.txt**
+
+## Database Setup
+
+### Create Postgres Database
+
+Create a postgres database. Replace your database details (NAME, USER, PASSWORD) in clavaaBackend/settings.py.
+Once Database is created and details updated in settings.py, then move to next step.
+
+### Apply Migrations
+
+Run the database migrations to set up your database schema:
+
+#### Command:
+
+- **python manage.py migrate**
+
+### Create a Superuser
+
+Create an admin user to access Django’s admin interface:
+
+#### Command:
+
+- **python manage.py createsuperuser**
+
+Follow the prompts to set up the superuser credentials.
+
+### Run Development Server
+
+To start the development server and verify that everything is working:
+
+- **python manage.py runserver**
+
+Local Server running at http://127.0.0.1:8000/. Access the admin interface at http://127.0.0.1:8000/admin/ using the superuser credentials.
+
+## Running Test Cases
+
+### Running Tests for whole project
+
+#### Command:
+
+- **python manage.py test**
+
+### Running Tests for a Specific App
+
+#### Command:
+
+- **python manage.py test your_app_name**
+
+Replace your_app_name with the name of the app you want to test. This command will discover and run all tests within the specified app.
+
+### Running Specific Test Case
+
+If you want to run a specific test case within an app, you can specify it with the following syntax:
+
+#### Command:
+
+- **python manage.py test your_app_name.tests.YourTestCase**
+
+#### Running Specific Test Case Method
+
+To run a specific test method within a test case:
+
+#### Command:
+
+- **python manage.py test your_app_name.tests.YourTestCase.test_specific_method**
+
+**Note:-** Please consult to concerned person if any issue. Thank you
