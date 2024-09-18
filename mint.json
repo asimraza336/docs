@@ -1,10 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
-  "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
-  },
+  "name": "Backend Project Docs",
   "favicon": "/favicon.svg",
   "colors": {
     "primary": "#0D9373",
@@ -15,10 +11,13 @@
       "to": "#07C983"
     }
   },
+  "primaryTab": {
+    "name": "Guide"
+  }, 
   "topbarLinks": [
     {
-      "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "name": "Contact Clavaa",
+      "url": "mailto:yechielg@clavaa.com"
     }
   ],
   "topbarCtaButton": {
@@ -26,82 +25,41 @@
     "url": "https://dashboard.mintlify.com"
   },
   "tabs": [
+    
     {
-      "name": "API Reference",
-      "url": "api-reference"
-    },
-    {
-      "name": "Content",
-      "url": "content"
+      "name": "Applications",
+      "url": "applications"
     }
   ],
-  "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
-    }
-  ],
+  
+
+
+
+
+  
   "navigation": [
-    {
-      "group": "Get Started",
-      "pages": [
-        "introduction",
-        "quickstart",
-        "development"
-      ]
-    },
     {
       "group": "Docs",
       "pages": [
+        "docs/overview",
         "docs/backend_setup_guide"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Code Guidelines",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "docs/code-guidelines/separation-of-applications",
+        "docs/code-guidelines/folder-structure",
+        "docs/code-guidelines/endpoint-structure"
       ]
     },
+
+
     {
-      "group": "API Documentation",
+      "group": "store_locations",
       "pages": [
-        "api-reference/introduction"
-      ]
-    },
-    {
-      "group": "Content",
-      "pages": [
-        "content/abc"
-      ]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "applications/store_locations/delete"
       ]
     }
-  ],
-  "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
-  }
+  ]
 }
