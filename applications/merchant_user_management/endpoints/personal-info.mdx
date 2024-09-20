@@ -1,0 +1,103 @@
+---
+id: create-personal-info-api
+title: Create Personal Info API
+sidebar_label: Create Personal Info
+---
+
+# Create Personal Info API
+
+This document describes the API endpoint `PersonalInfoView`, which handles the creation of controller and owner profiles for a merchant user.
+
+## Endpoint
+
+| Method | Path                           | Description                                                  |
+|--------|--------------------------------|--------------------------------------------------------------|
+| POST   | `/api/merchant/personal_info/` | Creates controller and owner profiles for the authenticated merchant user. |
+
+## 1. POST /api/merchant/personal_info/
+
+### Description
+
+This endpoint creates controller and owner profiles associated with the authenticated merchant user.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/personal_info/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication as a merchant user.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+| `Authorization`| Required  | Bearer token for merchant authentication. |
+
+#### Body Parameters
+
+| Parameter        | Necessity | Type     | Description                                                                  |
+|------------------|-----------|----------|------------------------------------------------------------------------------|
+| `controller_data`| Required  | Object   | A dictionary containing the controller's information.                        |
+| `controller_data.first_name`  | Required  | String   | The controller's first name.                                                 |
+| `controller_data.last_name`   | Required  | String   | The controller's last name.                                                  |
+| `controller_data.title`       | Required  | String   | The controller's job title.                                                  |
+| `controller_data.date_of_birth`| Required  | String   | The controller's date of birth (format: MM-DD-YYYY).                         |
+| `controller_data.ssn`         | Required  | String   | The controller's Social Security Number (format: 111-11-1111).               |
+| `controller_data.address`     | Required  | Object   | A dictionary containing the controller's address.                            |
+| `controller_data.address.address` | Required  | String   | The street address.                                                          |
+| `controller_data.address.city`    | Required  | String   | The city.                                                                    |
+| `controller_data.address.state`   | Required  | String   | The state.                                                                   |
+| `controller_data.address.zip_code`| Required  | String   | The zip code.                                                                |
+| `owner_data`    | Required  | Array    | A list of dictionaries, each containing an owner's information.              |
+| `owner_data[].first_name`     | Required  | String   | The owner's first name.                                                      |
+| `owner_data[].last_name`      | Required  | String   | The owner's last name.                                                       |
+| `owner_data[].date_of_birth`  | Required  | String   | The owner's date of birth (format: YYYY-MM-DD).                              |
+| `owner_data[].ssn`            | Required  | String   | The owner's Social Security Number (format: 111-11-1111).                    |
+| `owner_data[].address`        | Required  | Object   | A dictionary containing the owner's address.                                 |
+| `owner_data[].address.address`| Required  | String   | The street address.                                                          |
+| `owner_data[].address.city`   | Required  | String   | The city.                                                                    |
+| `owner_data[].address.state`  | Required  | String   | The state.                                                                   |
+| `owner_data[].address.zip_code`| Required | String   | The zip code.                                                                |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field   | Type   | Description                                               |
+|---------|--------|-----------------------------------------------------------|
+| `service` | String | A message indicating that the controller and owner profiles have been created. |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to a client error, such as a validation failure.
+
+#### Example: Duplicate SSN
+
+This error occurs when the provided SSN is the same for two owners being submitted.
+
+| **Field**       | **Type** | **Description**                                                      |
+|-----------------|----------|----------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.                 |
+| `error.error`   | String   | A descriptive message indicating that "Duplicate SSN's are not allowed". |

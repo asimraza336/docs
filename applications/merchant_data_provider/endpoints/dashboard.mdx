@@ -1,0 +1,153 @@
+---
+
+id: tabs-data-api
+
+title: Tabs Data API
+
+sidebar_label: Tabs Data
+
+---
+
+
+
+# Tabs Data API
+
+
+
+## Overview
+
+
+
+The `Tabs Data` endpoint provides aggregated dashboard data for a given merchant user. This data includes information such as total transactions, cashback earned, cashback redeemed, and the total number of users over a specified period.
+
+
+
+## Endpoints
+
+
+
+| Method | Path                    | Description                                       |
+
+|--------|-------------------------|---------------------------------------------------|
+
+| GET    | `/api/merchant/tabs/data/` | Retrieves aggregated dashboard data for a merchant user. |
+
+
+
+## 1. GET /api/merchant/tabs/data/
+
+
+
+### Description
+
+
+
+This endpoint retrieves and aggregates dashboard data for a merchant user. The data can be filtered based on the number of days specified in the query parameters.
+
+
+
+### Request Method
+
+
+
+`GET`
+
+
+
+### Path
+
+
+
+`/api/merchant/tabs/data/`
+
+
+
+### Location in Django Files
+
+
+
+`views.py`
+
+
+
+### Authentication
+
+
+
+This endpoint requires authentication using a merchant token.
+
+
+
+### Permissions
+
+
+
+The user must be a merchant with a valid session.
+
+
+
+### Request Structure
+
+
+
+#### Query Parameters
+
+
+
+| Parameter | Necessity | Type    | Description                                                    |
+
+|-----------|-----------|---------|----------------------------------------------------------------|
+
+| `days`    | Optional  | Integer | The number of days to consider for recent data. Defaults to 30.|
+
+
+
+### Response Structure
+
+
+
+#### Success Response
+
+
+
+**Status Code:** `200 OK`
+
+
+
+| Field            | Type    | Description                                         |
+
+|------------------|---------|-----------------------------------------------------|
+
+| `transactions`   | String  | The total number of transactions during the period. |
+
+| `cashbackEarned` | String  | The total amount of cashback earned.                |
+
+| `cashbackRedeemed`| String  | The total amount of cashback redeemed.             |
+
+| `totalUsers`     | String  | The total number of users.                          |
+
+
+
+### Error Handling
+
+
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+
+
+### Possible Status Codes
+
+
+
+**Status Code:** `400 Bad Request`
+
+
+
+This status code indicates that the server could not understand the request due to invalid syntax. This typically occurs when validation fails for one or more fields.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "An error occurred on our end." |
+

@@ -1,0 +1,96 @@
+---
+id: create-merchant-location-api
+title: Create Merchant Location API
+sidebar_label: Create Merchant Location
+---
+
+# Create Merchant Location API
+
+## Overview
+
+The `Create Merchant Location` endpoint allows a merchant to create a new location associated with their business. The endpoint accepts details about the location, including its address, type, and optional contact information, and returns the newly created location's data.
+
+## Endpoints
+
+| Method | Path                           | Description                                          |
+|--------|--------------------------------|------------------------------------------------------|
+| POST   | `/api/merchant/locations/`     | Creates a new merchant location.                     |
+
+## 1. POST /api/merchant/locations/
+
+### Description
+
+This endpoint creates a new merchant location with the information provided in the request. The location details include mandatory fields like the name and address, along with optional fields such as a description, phone number, and website URL.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/locations/`
+
+### Location in Django Files
+
+`views.py`
+
+### Authentication
+
+This endpoint requires authentication using a merchant token.
+
+### Permissions
+
+The user must be an authenticated merchant.
+
+### Request Structure
+
+#### Body Parameters
+
+| Parameter       | Necessity | Type    | Description                                                |
+|-----------------|-----------|---------|------------------------------------------------------------|
+| `name`          | Required  | String  | The name of the location.                                  |
+| `address`       | Required  | Object  | The address details of the location.                       |
+| `address.address` | Required  | String  | The full address of the location.                         |
+| `address.city`  | Required  | String  | The city where the location is situated.                   |
+| `address.state` | Required  | String  | The state where the location is situated.                  |
+| `address.zip_code` | Required  | String  | The zip code of the location.                              |
+| `description`   | Optional  | String  | A brief description of the location.                       |
+| `type`          | Optional  | String  | The type of location (e.g., "Retail", "Restaurant").       |
+| `number`        | Optional  | String  | The phone number of the location.                          |
+| `website`       | Optional  | String  | The website URL of the location.                           |
+| `email`         | Optional  | String  | The email address of the location.                         |
+| `storePhoto`    | Optional  | String  | Base64 encoded image data representing the store's photo.  |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `201 Created`
+
+| Field          | Type    | Description                                                      |
+|----------------|---------|------------------------------------------------------------------|
+| `id`           | Integer | The unique ID of the newly created location.                     |
+| `name`         | String  | The name of the location.                                        |
+| `address`      | String  | The full address of the location.                                |
+| `storePhoto`   | String  | The URL of the uploaded store photo.                             |
+| `description`  | String  | A brief description of the location.                             |
+| `type`         | String  | The type of location.                                            |
+| `number`       | String  | The phone number of the location.                                |
+| `website`      | String  | The website URL of the location.                                 |
+| `email`        | String  | The email address of the location.                               |
+| `status`       | String  | The status of the location (e.g., "Active").                     |
+
+### Error Handling
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+### Possible Status Codes
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to invalid or missing data in the request body.
+
+**Status Code:** `401 Unauthorized`
+
+This status code indicates that the user is not authenticated or does not have the necessary permissions to access the endpoint.
+

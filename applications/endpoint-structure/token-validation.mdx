@@ -1,0 +1,60 @@
+---
+id: verify-token-decorator
+title: Verify Token Decorator
+sidebar_label: Verify Token
+---
+
+# Verify Token Decorator
+
+## Overview
+
+The `verify_token` decorator is designed to enforce token-based authentication for Django views. It validates the presence and correctness of the authorization token in the request header and associates the token with a specific user type, such as a merchant, app, or register user. If the token is valid, the decorator allows the request to proceed to the view. Otherwise, it returns an appropriate error response.
+
+## Key Features
+
+### 1. Token Validation
+
+The decorator ensures that an `Authorization` header is present in the request. The token in the header must follow the format `Token <key>`, where:
+- `Token` is the token type.
+- `<key>` is the actual authentication token.
+
+If the authorization header is missing or incorrectly formatted, the decorator immediately returns an error response with a `401 Unauthorized` status, indicating that authentication failed.
+
+### 2. Token Type Checking
+
+Once the token is extracted from the header, the decorator checks whether the token type is `Token`. If the token type is anything other than `Token`, the request is rejected with a `401 Unauthorized` error. This ensures that only properly formatted tokens are accepted.
+
+### 3. User Type Validation
+
+The decorator validates the token based on the `user_type` parameter, which determines the type of user expected to be authenticated. The supported user types include:
+
+- **Merchant**: If `user_type` is set to `'merchant'`, the decorator verifies the token against `MerchantUser` records. If the token is invalid or the user does not exist, the decorator returns a `401 Unauthorized` error.
+  
+- **App**: If `user_type` is set to `'app'`, the decorator verifies the token against `DRFToken` records, which are tied to users of the app. If the token is invalid or the user does not exist, a `401 Unauthorized` response is returned.
+  
+- **Register**: If `user_type` is set to `'register'`, the decorator verifies the token against `RegisterToken` records, validating users associated with a register. Again, if the token is invalid or the user is not found, the decorator returns a `401 Unauthorized` response.
+
+If the `user_type` is anything other than these expected values, the decorator responds with a `400 Bad Request` status, indicating that an invalid user type was provided.
+
+### 4. User Assignment to Request
+
+If the token is valid and corresponds to the correct user type, the authenticated user is assigned to the `request.user` attribute. This allows the authenticated user to be accessed and used within the view function, enabling any user-specific logic to be applied.
+
+### 5. Error Handling
+
+The decorator provides detailed error responses for various failure scenarios:
+- **Missing Authorization Header**: If the request lacks an `Authorization` header, the decorator returns a `401 Unauthorized` error with the message `"Authorization header missing"`.
+  
+- **Invalid Token Type**: If the token type in the header is anything other than `"Token"`, the decorator returns a `401 Unauthorized` error with the message `"Invalid token type"`.
+  
+- **Invalid Token Format**: If the authorization header does not follow the expected format of `Token <key>`, the decorator returns a `401 Unauthorized` error with the message `"Invalid token header format"`.
+  
+- **Invalid Token**: If the token does not correspond to any user in the database (based on the `user_type`), a `401 Unauthorized` error with the message `"Invalid token"` is returned.
+
+### Use Case
+
+The `verify_token` decorator is useful for enforcing token-based authentication in Django views, particularly when different types of users (e.g., merchants, app users, register users) require different token verification mechanisms. By assigning the authenticated user to the `request.user` object, the view logic can safely assume that a valid, authenticated user is present and can proceed with user-specific operations.
+
+### Conclusion
+
+The `verify_token` decorator simplifies token-based authentication for Django views by validating tokens, checking user types, and returning appropriate error responses in case of failure. By supporting multiple user types and ensuring consistency in token validation, the decorator helps protect API endpoints and other sensitive views from unauthorized access.

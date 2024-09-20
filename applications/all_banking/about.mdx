@@ -1,0 +1,48 @@
+---
+id: about
+title: About Our Banking System
+sidebar_label: About
+---
+
+## Overview
+
+This document provides an overview of how our banking system integrates with Plaid to interact with users' bank accounts. Our approach emphasizes security and privacy by minimizing the storage of sensitive banking information. Instead, we rely on Plaid to retrieve and display account data as needed, and we use processor tokens for transactions.
+
+### Plaid Integration
+
+Our system utilizes Plaid as the central service for interacting with users' bank accounts. Here’s how it works:
+
+#### **1. Creating Link Tokens**
+
+Plaid is used to generate link tokens that allow users to securely link their bank accounts to our application. This process is handled by two key endpoints:
+
+- **`token_creator_for_android`**: This view generates a link token specifically for Android app users. The token is used to initiate the bank account linking process within the Android environment.
+- **`TokenCreatorForBrowserView`**: This view generates a link token for users accessing the system through a web browser, particularly for merchant users. The token includes a redirect URI that points back to our application upon successful linking.
+
+#### **2. Exchanging Public Tokens for Access Tokens**
+
+Once a user successfully links their bank account, Plaid returns a public token. Our system exchanges this public token for an access token using `PlaidApi.exchange_public_token`. The access token is a temporary credential that allows us to interact with the user's bank account via Plaid.
+
+#### **3. Using Processor Tokens**
+
+After obtaining the access token, we generate a processor token using `PlaidApi.create_processor_token`. The processor token is essential for initiating transactions through third-party payment processors (e.g., Dwolla). This token is specific to the user's bank account and enables us to securely process payments without directly handling sensitive bank details.
+
+### Bank Account Information Handling
+
+#### **Retrieving and Displaying Account Information**
+
+- **Account Details**: Using the access token, we retrieve basic information about the user's bank account, such as the account balance, account type, and the last four digits of the account number. This information is fetched in real-time from Plaid and displayed to the user within the app.
+
+- **Security and Privacy**: We do not store sensitive banking information (such as full account numbers or balances) in our database. Instead, we use Plaid to retrieve this data on-demand. Only non-sensitive information, like bank names and logos, is stored to enhance the user interface.
+
+#### **Processor Tokens for Transactions**
+
+- **Transaction Handling**: The processor tokens generated through Plaid are used to facilitate transactions via our payment processor. This method ensures that we do not directly handle or store any sensitive banking data, as all transaction-related information is securely managed by Plaid and our payment processor.
+
+### Error Handling and Security
+
+Our banking interactions are wrapped in robust error handling and security checks using custom decorators like `@handle_errors` and `@verify_token`. These decorators ensure that only authorized users can perform operations, and any errors encountered during interactions with Plaid are properly managed.
+
+### Conclusion
+
+Our banking system is designed with a strong focus on security and privacy. By leveraging Plaid, we can provide users with a seamless experience for managing their bank accounts while minimizing the storage and handling of sensitive information. Developers working on this system should be familiar with Plaid's API and our token-based interaction model to effectively maintain and extend these features.

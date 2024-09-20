@@ -1,0 +1,91 @@
+---
+id: create-transaction-api
+title: Create Transaction API
+sidebar_label: Create Transaction
+---
+
+# Create Transaction API
+
+## Overview
+
+The `Create Transaction` endpoint handles POST requests for creating a new transaction. The transaction is associated with a specific user, register, and location.
+
+## Endpoints
+
+| Method | Path                                     | Description                             |
+|--------|------------------------------------------|-----------------------------------------|
+| POST   | `/api/register/create_transaction/`       | Creates a new transaction for a user.   |
+
+## 1. POST /api/register/create_transaction/
+
+### Description
+
+This endpoint allows users to create new transactions by submitting the relevant transaction data. The transaction is tied to a user, register, and location.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/register/create_transaction/`
+
+### Location in Django Files
+
+`views.py`
+
+### Authentication
+
+This endpoint requires authentication using a valid token, which should be passed as part of the request header.
+
+### Permissions
+
+This endpoint requires that the user has the necessary permissions to create a transaction.
+
+### Request Structure
+
+#### Body Parameters
+
+| Parameter              | Necessity | Type    | Description                                                         |
+|------------------------|-----------|---------|---------------------------------------------------------------------|
+| `user_id`              | Required  | Integer | The ID of the user associated with the transaction.                 |
+| `transaction_amount`    | Required  | String  | The amount of the transaction.                                      |
+| `register_id`           | Required  | String | The ID of the register associated with the transaction.             |
+| `location_model_id`     | Required  | String | The ID of the location model associated with the transaction.        |
+| `register_event_id`     | Required  | String | The event ID of the register event for websocket purposes.           |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field     | Type    | Description                                          |
+|-----------|---------|------------------------------------------------------|
+| `message` | String  | A message indicating the transaction was created.    |
+
+#### Error Response
+
+**Status Code:** `400 Bad Request`
+
+| Field     | Type    | Description                                          |
+|-----------|---------|------------------------------------------------------|
+| `error`   | String  | An error message indicating why the transaction could not be created. |
+
+### Error Handling
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+#### Possible Status Codes
+
+**Status Code:** `200 OK`
+
+This status code indicates that the transaction was successfully created.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the request could not be processed due to invalid or missing data in the request body.
+
+**Status Code:** `401 Unauthorized`
+
+This status code indicates that the authentication token is invalid or missing.

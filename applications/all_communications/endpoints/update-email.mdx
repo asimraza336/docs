@@ -1,0 +1,149 @@
+id: send-email-reset-otp
+title: Send Email Reset OTP API
+sidebar_label: Send Email Reset OTP
+---
+
+# Send Email Reset OTP API
+
+This document describes the API endpoints `SendMerchantEmailResetOTP` and `SendAppUserEmailResetOTP`, which handle sending an OTP to an email address for resetting a password or verifying the user's identity.
+
+## Endpoints
+
+| Method | Path                            | Description                                             |
+|--------|---------------------------------|---------------------------------------------------------|
+| POST   | `/api/appUser/reset/email/`      | Sends an OTP to an app user's email for resetting their password. |
+| POST   | `/api/merchant/reset/email/`     | Sends an OTP to a merchant's email for resetting their password.  |
+
+## 1. POST /api/merchant/reset/email/
+
+### Description
+
+This endpoint sends an OTP to a merchant's email address to facilitate resetting their password or verifying their identity.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/reset/email/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint does not require authentication.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+
+#### Body Parameters
+
+| Parameter | Necessity | Type   | Description                                    |
+|-----------|-----------|--------|------------------------------------------------|
+| `email`   | Required  | String | The email address of the merchant to which the OTP will be sent. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field       | Type    | Description                                         |
+|-------------|---------|-----------------------------------------------------|
+| `profile_pk`| Integer | The primary key of the merchant profile. If the email is invalid and not valid for any user, this will return `invalid_pk`. |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that an unexpected error occurred on the server's end.
+
+##### Example: Internal Server Error
+
+This error occurs when something goes wrong on the server that isn't related to the user's input.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "An error occurred on our end." |
+
+## 2. POST /api/appUser/reset/email/
+
+### Description
+
+This endpoint sends an OTP to an app user's email address to facilitate resetting their password or verifying their identity.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/appUser/reset/email/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint does not require authentication.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+
+#### Body Parameters
+
+| Parameter | Necessity | Type   | Description                                    |
+|-----------|-----------|--------|------------------------------------------------|
+| `email`   | Required  | String | The email address of the app user to which the OTP will be sent. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field       | Type    | Description                                         |
+|-------------|---------|-----------------------------------------------------|
+| `profile_pk`| Integer | The primary key of the app user profile. If the email is invalid, this will return `invalid_pk`. |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that an unexpected error occurred on the server's end.
+
+##### Example: Internal Server Error
+
+This error occurs when something goes wrong on the server that isn't related to the user's input.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "An error occurred on our end." |

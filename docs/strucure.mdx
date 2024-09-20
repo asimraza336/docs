@@ -1,0 +1,135 @@
+---
+id: endpoint-title
+title: Endpoint Title
+sidebar_label: Short Description for Sidebar
+---
+
+# Endpoint Title
+
+## Overview
+
+This section provides a general description of what the endpoint does, its purpose, and when it should be used.
+
+## Endpoints
+
+| Method | Path                             | Description                                           |
+|--------|----------------------------------|-------------------------------------------------------|
+| POST   | `/api/v1/example-endpoint`       | Brief description of what this endpoint does          |
+| GET    | `/api/v1/example-endpoint/:id`   | Brief description of what this endpoint does          |
+| PUT    | `/api/v1/example-endpoint/:id`   | Brief description of what this endpoint does          |
+| DELETE | `/api/v1/example-endpoint/:id`   | Brief description of what this endpoint does          |
+
+## 1. POST /api/v1/example-endpoint
+
+### Description
+
+This endpoint is used to create a new resource. Include a detailed description here, explaining the purpose, how it interacts with other endpoints or systems, and any other relevant information.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/v1/example-endpoint`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication. The user must be logged in and have the appropriate permissions.
+
+### Permissions
+
+- `app_name.add_model_name`
+- `app_name.change_model_name`
+
+### Request Structure
+
+#### Headers
+
+| Header          | Necessity | Description                                  |
+|-----------------|-----------|----------------------------------------------|
+| `Authorization` | Required  | Bearer token for authentication              |
+| `Content-Type`  | Required  | `application/x-www-form-urlencoded`          |
+
+#### Body Parameters
+
+| Parameter            | Necessity | Type    | Description                                               |
+|----------------------|-----------|---------|-----------------------------------------------------------|
+| `param_1`            | Required  | String  | Description of `param_1`.                                  |
+| `param_2`            | Optional  | Integer | Description of `param_2`.                                  |
+| `nested_param`       | Required  | Object  | Object containing detailed information about the resource. |
+| `nested_param.field` | Required  | String  | Description of `nested_param.field`.                       |
+
+##### Object Parameters
+
+For parameters that are objects, detail each field within the object:
+
+- **`nested_param`** (Object):
+  - **`field`** (Required, String): Description of `field` within `nested_param`.
+  - **`another_field`** (Optional, Integer): Description of `another_field`.
+
+##### Array Parameters
+
+For parameters that are arrays, describe the structure of the array and its elements:
+
+- **`items`** (Required, Array):
+  - Array of objects where each object contains details about an item.
+  - **`items[i].name`** (Required, String): The name of the item.
+  - **`items[i].quantity`** (Required, Integer): The quantity of the item.
+  - **`items[i].price`** (Required, Object):
+    - **`price.amount`** (Required, Integer): The price of the item.
+    - **`price.currency`** (Required, String): The currency of the item price.
+
+#### Example Request
+
+
+
+# Response Structure
+
+## Success Response
+
+**Status Code:** `201 Created`
+
+| Field | Type   | Description                               |
+|-------|--------|-------------------------------------------|
+| id    | String | The unique identifier of the created item.|
+
+
+# Error Handling
+
+When interacting with our API, you may encounter various HTTP status codes that indicate the success or failure of your request. Below is a list of possible status codes, their meanings, and examples of responses.
+
+## Possible Status Codes
+
+#### Error Response
+
+Errors in this API are typically formatted as follows:
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not understand the request due to invalid syntax. This typically occurs when validation fails for one or more fields.
+
+
+
+| **Field**       | **Type** | **Description**                                                     |
+|:---------------:|:--------:|:-------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "an error occurred on our end." |
+
+This usually indicates isssue number 2
+
+
+
+| **Field**       | **Type** | **Description**                                                     |
+|:---------------:|:--------:|:-------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message explaining ssue number two" |
+---
+
+
+
+> **Note:** Use notes where needed

@@ -1,0 +1,80 @@
+---
+id: register-api
+title: Register API
+sidebar_label: Register
+---
+
+# Register API
+
+## Overview
+
+The `Register` endpoint handles POST requests for registering new users. This process involves creating a new user with the desired credentials provided by the merchant user.
+
+## Endpoints
+
+| Method | Path                  | Description                                       |
+|--------|-----------------------|---------------------------------------------------|
+| POST   | `/api/merchant/register-account/`       | Registers a new user with the provided credentials.|
+
+## 1. POST /api/register/
+
+### Description
+
+This endpoint registers a new user with the username and password provided in the request data. The request must be made by an authenticated merchant user.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/register-account/`
+
+### Location in Django Files
+
+`views.py`
+
+### Authentication
+
+This endpoint requires authentication using a merchant token.
+
+### Permissions
+
+The user must be an authenticated merchant user.
+
+### Request Structure
+
+#### Body Parameters
+
+| Parameter | Necessity | Type    | Description                                                    |
+|-----------|-----------|---------|----------------------------------------------------------------|
+| `username`| Required  | String  | The desired username for the new user.                        |
+| `password`| Required  | String  | The desired password for the new user.                        |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field            | Type    | Description                                                      |
+|------------------|---------|------------------------------------------------------------------|
+| `register_data`  | Object  | Contains the updated registration information for the new user.  |
+| `register_data.username` | String | The username of the newly registered user. |
+| `register_data.registerPin` | Integer | A pin associated with the new user's registration. |
+| `register_data.registerCount` | Integer | The count of registrations associated with this merchant. |
+
+### Error Handling
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+### Possible Status Codes
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not complete the registration due to an issue such as the username already being taken.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating the reason for the error, such as "Username already exists." |

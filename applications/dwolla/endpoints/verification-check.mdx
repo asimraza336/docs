@@ -1,0 +1,202 @@
+---
+id: user-verification-status-api  
+title: User Verification Status API  
+sidebar_label: User Verification Status  
+---
+
+# User Verification Status API
+
+This document outlines the `UserVerificationStatusAPIView` API endpoint, which retrieves the verification status of a merchant user.
+
+## Endpoint
+
+| Method | Path                                 | Description                                                         |
+|--------|--------------------------------------|---------------------------------------------------------------------|
+| GET    | `/api/merchant/verification-status/` | Retrieves the verification status of the authenticated merchant user.|
+
+## 1. GET /api/merchant/verification-status/
+
+### Description
+
+This endpoint retrieves the verification status of the authenticated merchant user, including additional details about the verification process.
+
+### Request Method
+
+`GET`
+
+### Path
+
+`/api/merchant/verification-status/`
+
+### Location in Django Files
+
+`dwolla/views/status_check.py`
+
+### Authentication
+
+This endpoint requires merchant user authentication.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                                      |
+|----------------|-----------|--------------------------------------------------|
+| `Authorization`| Required  | Bearer token for merchant authentication.        |
+
+### Response Structure
+
+The structure of the response varies depending on the `status` value.
+
+#### 1. Status: `certified`
+
+Indicates that the merchant user's verification is complete and successful.
+
+**Status Code:** `200 OK`
+
+| Field    | Type   | Description                           |
+|----------|--------|---------------------------------------|
+| `status` | String | `"verified"` - The user is fully verified. |
+
+
+
+#### 2. Status: `retry`
+
+Indicates that the user needs to retry verification with additional information.
+
+**Status Code:** `200 OK`
+
+| Field              | Type   | Description                                                                 |
+|--------------------|--------|-----------------------------------------------------------------------------|
+| `status`           | String | `"retry"` - The user needs to retry verification.                            |
+| `retry_controller_data` | Object | (Optional) Details if the controller needs to retry verification.            |
+| `retry_business_data`   | Object | (Optional) Details if the business needs to retry verification.              |
+| `owner_retry_data` | Array  | (Optional) A list of dictionaries containing retry information for each owner.|
+
+##### `retry_controller_data` Structure
+
+Derived from `ControllerProfileSerializer`:
+
+| Field           | Type   | Description                                     |
+|-----------------|--------|-------------------------------------------------|
+| `First Name`    | Object | `{"first_name": "John"}` - The controller's first name. |
+| `Last Name`     | Object | `{"last_name": "Doe"}` - The controller's last name.  |
+| `Title`         | Object | `{"title": "CEO"}` - The controller's job title.      |
+| `Date Of Birth` | Object | `{"date_of_birth": "1980-01-01"}` - The controller's date of birth. |
+| `SSN`           | Object | `{"ssn": "111-11-1111"}` - The controller's Social Security Number. |
+| `address.address`       | Object | A dictionary containing the controller's address, structured as follows: |
+
+###### `Address` Structure (for `controller retry` and `business retry`)
+
+| Field      | Type   | Description                         |
+|------------|--------|-------------------------------------|
+| `address`  | Object | `{"address": "123 Main St"}` - The street address. |
+| `city`     | Object | `{"city": "Anytown"}` - The city.                   |
+| `state`    | Object | `{"state": "CA"}` - The state.                     |
+| `zip_code` | Object | `{"zip_code": "12345"}` - The zip code.             |
+
+##### `retry_business_data` Structure
+
+Derived from `BusinessProfileSerializer`:
+
+| Field                      | Type   | Description                                          |
+|----------------------------|--------|------------------------------------------------------|
+| `Business Name`            | Object | `{"business_name": "Doe's Store"}` - The business name.            |
+| `Business Classification`  | Object | `{"business_classification": "Retail"}` - The business classification. |
+| `Business Classification Id` | Object | `{"business_classification_id": "12345"}` - The business classification ID. |
+| `Business Structure`       | Object | `{"business_structure": "Sole Proprietorship"}` - The business structure. |
+| `EIN`                      | Object | `{"ein": "12-3456789"}` - The Employer Identification Number (EIN). |
+| `Doing Business As`        | Object | `{"doing_business_as": "Doe's Corner Store"}` - The DBA name.  |
+| `Website`                  | Object | `{"website": "http://www.doessstore.com"}` - The business's website. |
+| `address.address`                  | Object | A dictionary containing the business's address, structured as follows: |
+
+###### `Address` Structure (for `business retry`)
+
+| Field      | Type   | Description                         |
+|------------|--------|-------------------------------------|
+| `address`  | Object | `{"address": "123 Main St"}` - The street address. |
+| `city`     | Object | `{"city": "Anytown"}` - The city.                   |
+| `state`    | Object | `{"state": "CA"}` - The state.                     |
+| `zip_code` | Object | `{"zip_code": "12345"}` - The zip code.             |
+
+##### `owner_retry_data` Structure
+
+Derived from `OwnerProfileSerializer`:
+
+| Field           | Type   | Description                                      |
+|-----------------|--------|--------------------------------------------------|
+| `First Name`    | Object | `{"first_name": "Jane"}` - The owner's first name.|
+| `Last Name`     | Object | `{"last_name": "Doe"}` - The owner's last name.   |
+| `Date Of Birth` | Object | `{"date_of_birth": "1985-02-02"}` - The owner's date of birth. |
+| `SSN`           | Object | `{"ssn": "222-22-2222"}` - The owner's Social Security Number. |
+| `address`       | Object | A dictionary containing the owner's address, structured similarly to the `Address` structure above. |
+
+### 3. Status: `document`
+
+Indicates that the user needs to upload documents for verification.
+
+**Status Code:** `200 OK`
+
+| Field    | Type   | Description                                                        |
+|----------|--------|--------------------------------------------------------------------|
+| `status` | String | `"document"` - The user needs to upload documents for verification.|
+
+#### `documents` Structure
+
+The `documents` array contains entries for various document requirements, which may include controller, business, DBA, and owner documents.
+
+| Field        | Type    | Description                                                                                   |
+|--------------|---------|-----------------------------------------------------------------------------------------------|
+| `id`         | Integer | The ID of the owner, present only for owner documents.                                        |
+| `serverName` | String  | The server name associated with the document. Possible values include:                         |
+|              |         | - `"Controller"`: For documents related to the controller of the business.                     |
+|              |         | - `"Business"`: For documents related to the business entity itself.                           |
+|              |         | - `"DBA"`: For documents related to the "Doing Business As" (DBA) name.                        |
+|              |         | - `"Owner"`: For documents related to individual owners of the business.                       |
+| `name`       | String  | The name of the document (e.g., "Controller ID", "Business Document", "DBA Document").         |
+| `types`      | Array   | A list of acceptable document types (e.g., `["license", "idCard", "passport"]`).              |
+| `helpText`   | String  | Guidance text for uploading the document (e.g., "Upload a clear, non-expired ID").            |
+| `headerText` | String  | Header text indicating documentation requirements (e.g., "Upload a valid identification document"). |
+| `errors`     | Array   | (Optional) A list of error messages for the uploaded document.                                 |
+
+
+#### 4. Status: `suspended`
+
+Indicates that the user's account is suspended.
+
+**Status Code:** `200 OK`
+
+| Field    | Type   | Description                                  |
+|----------|--------|----------------------------------------------|
+| `status` | String | `"suspended"` - The user's account is suspended.|
+
+#### 5. Status: `documentPending`
+
+Indicates that the user has uploaded documents and they are under review by Dwolla.
+
+**Status Code:** `200 OK`
+
+| Field    | Type   | Description                                                |
+|----------|--------|------------------------------------------------------------|
+| `status` | String | `"documentPending"` - The uploaded documents are being reviewed by Dwolla.|
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that an unexpected error occurred on the server's end.
+
+##### Example: Internal Server Error
+
+This error occurs when something goes wrong on the server that isn't related to the user's input.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "An error occurred on our end." |

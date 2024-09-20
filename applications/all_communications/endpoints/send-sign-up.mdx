@@ -1,0 +1,152 @@
+id: sign-up-email-otp-api
+title: Sign Up Email OTP API
+sidebar_label: Sign Up Email OTP
+---
+
+# Sign Up Email OTP API
+
+This document describes the API endpoints `SendMerchantEmailOTP` and `SendAppUserEmailOTP`, which handle sending an OTP (One-Time Password) to an email address during the signup process.
+
+## Endpoints
+
+| Method | Path                             | Description                                           |
+|--------|----------------------------------|-------------------------------------------------------|
+| POST   | `/api/merchant/email/`  | Sends an OTP to a merchant's email for signup.        |
+| POST   | `api/appUser/email/`  | Sends an OTP to an app user's email for signup.       |
+
+## 1. POST /api/merchant/email/
+
+### Description
+
+This endpoint sends an OTP to a merchant's email address to facilitate their signup process.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/email/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint does not require authentication.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+
+#### Body Parameters
+
+| Parameter | Necessity | Type   | Description                                    |
+|-----------|-----------|--------|------------------------------------------------|
+| `email`   | Required  | String | The email address of the merchant to which the OTP will be sent. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field       | Type    | Description                                         |
+|-------------|---------|-----------------------------------------------------|
+| `profile_pk`| Integer | The primary key of the newly created merchant profile. |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to a client error, such as a validation failure.
+
+##### Example: Email Already Registered
+
+This error occurs when the provided email is already associated with an existing merchant account.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.email`   | String   | A descriptive message indicating that "This email has already been registered." |
+| `error.error` | String   | A descriptive message indicating that "An error occurred on our end." |
+
+
+
+## 2. POST api/appUser/email/
+
+### Description
+
+This endpoint sends an OTP to an app user's email address to facilitate their signup process.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`api/appUser/email/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint does not require authentication.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+
+#### Body Parameters
+
+| Parameter | Necessity | Type   | Description                                    |
+|-----------|-----------|--------|------------------------------------------------|
+| `email`   | Required  | String | The email address of the app user to which the OTP will be sent. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field       | Type    | Description                                         |
+|-------------|---------|-----------------------------------------------------|
+| `profile_pk`| Integer | The primary key of the newly created app user profile. |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to a client error, such as a validation failure.
+
+##### Example: Email Already Registered
+
+This error occurs when the provided email is already associated with an existing app user account.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "This email has already been registered." |

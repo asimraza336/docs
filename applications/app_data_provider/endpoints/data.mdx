@@ -1,0 +1,163 @@
+id: app-user-data-api
+title: App User Data API
+sidebar_label: App User Data
+---
+
+# App User Data API
+
+This document describes the API endpoint `UserDataView`, which retrieves and aggregates all relevant data for an app user's dashboard.
+
+## Endpoint
+
+| Method | Path                      | Description                                            |
+|--------|---------------------------|--------------------------------------------------------|
+| GET    | `/api/appUser/user/data/`  | Retrieves all data related to the app user's dashboard. |
+
+## 1. GET /api/appUser/user/data/
+
+### Description
+
+This endpoint fetches and aggregates various pieces of data relevant to the app user, including profile information, transaction history, cashback balances, associated accounts, and store locations.
+
+### Request Method
+
+`GET`
+
+### Path
+
+`/api/appUser/user/data/`
+
+### Location in Django Files
+
+`app_user_management/views.py`
+
+### Authentication
+
+This endpoint requires authentication via a valid token.
+
+### Permissions
+
+Only accessible by authenticated app users.
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Authorization`| Required  | Bearer token obtained during sign-in.|
+
+### Response Structure
+
+**Status Code:** `200 OK`
+
+The response is a JSON object containing the following sections:
+
+| Field              | Type    | Description                                                                 |
+|--------------------|---------|-----------------------------------------------------------------------------|
+| `consumerProfile`  | Object  | Contains the user's profile information including first name, last name, email, and date joined. |
+| `transactions`     | Array   | A list of transactions made by the user. Each transaction includes details like ID, name, cashback earned, amount, status, register ID, and date. |
+| `transactionCount` | Integer | The total number of transactions.                                            |
+| `cashbackBalances` | Array   | A list of cashback balances associated with the user. Each balance includes details like updated date, ID, amount, name, and type. |
+| `cashbackTotal`    | Float   | The total cashback earned by the user.                                       |
+| `accounts`         | Array   | A list of bank accounts associated with the user. Each account includes details like account number, account name, bank name, balance, last checked date, logo URL, primary status, and account type. |
+| `storeLocations`   | Array   | A list of store locations where the user can earn cashback. Each location includes details like ID, name, address, store photo URL, description, type, phone number, website, email, status, and cashback offered. |
+
+### Detailed Field Descriptions
+
+#### `consumerProfile` (Object)
+
+| Field       | Type   | Description                                 |
+|-------------|--------|---------------------------------------------|
+| `firstName` | String | The first name of the user.                 |
+| `lastName`  | String | The last name of the user.                  |
+| `email`     | String | The email address of the user.              |
+| `dateJoined`| String | The date when the user joined the platform. |
+
+#### `transactions` (Array)
+
+| Field              | Type    | Description                                            |
+|--------------------|---------|--------------------------------------------------------|
+| `id`               | Integer | The unique identifier for the transaction.             |
+| `name`             | String  | The name associated with the transaction.              |
+| `cashbackEarned`   | Float   | The amount of cashback earned from the transaction.     |
+| `cashbackAmount`   | Float   | The total amount involved in the transaction.          |
+| `processing_status`| String  | The status of the transaction (e.g., "successful").    |
+| `register`         | Integer | The register ID where the transaction took place.      |
+| `amount`           | Float   | The transaction amount.                                |
+| `date`             | String  | The date of the transaction.                           |
+
+#### `transactionCount` (Integer)
+
+| Field              | Type    | Description                                            |
+|--------------------|---------|--------------------------------------------------------|
+| `transactionCount` | Integer | The total number of transactions made by the user.     |
+
+#### `cashbackBalances` (Array)
+
+| Field          | Type    | Description                                            |
+|----------------|---------|--------------------------------------------------------|
+| `updated_date` | String  | The date when the cashback balance was last updated.   |
+| `id`           | Integer | The unique identifier for the cashback balance.        |
+| `amount`       | Float   | The amount of cashback in this balance.                |
+| `name`         | String  | The name associated with the cashback balance.         |
+| `type`         | String  | The type of establishment or service providing cashback.|
+
+#### `cashbackTotal` (Float)
+
+| Field          | Type    | Description                                            |
+|----------------|---------|--------------------------------------------------------|
+| `cashbackTotal`| Float   | The total cashback earned by the user across all transactions.|
+
+#### `accounts` (Array)
+
+| Field         | Type    | Description                                            |
+|---------------|---------|--------------------------------------------------------|
+| `accountNumber`| String  | The account number associated with the user's bank account. |
+| `accountName`  | String  | The name of the bank account.                          |
+| `bankName`     | String  | The name of the bank where the account is held.        |
+| `balance`      | String  | The balance in the user's bank account.                |
+| `lastChecked`  | String  | The last time the account balance was checked.         |
+| `logo`         | String  | The URL to the bank's logo.                            |
+| `isPrimary`    | Boolean | Indicates whether this is the user's primary account.  |
+| `accountType`  | String  | The type of bank account (e.g., "Checking").           |
+
+#### `storeLocations` (Array)
+
+| Field         | Type    | Description                                            |
+|---------------|---------|--------------------------------------------------------|
+| `id`          | Integer | The unique identifier for the store location.          |
+| `name`        | String  | The name of the store.                                  |
+| `address`     | String  | The physical address of the store.                      |
+| `storePhoto`  | String  | The URL to the store's photo.                           |
+| `description` | String  | A brief description of the store.                       |
+| `type`        | String  | The type of store (e.g., "Retail").                     |
+| `phone`       | String  | The contact phone number for the store.                 |
+| `website`     | String  | The store's website URL.                                |
+| `email`       | String  | The contact email for the store.                        |
+| `status`      | String  | The operational status of the store (e.g., "Active").   |
+| `cashback`    | Float   | The cashback percentage or amount offered by the store. |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to a client error.
+
+### Workflow
+
+1. **Token Verification**:
+   - The request's authentication token is verified to ensure the user is authorized to access the data.
+   
+2. **Data Aggregation**:
+   - The service gathers various data points related to the app user, including profile details, transaction history, cashback balances, accounts, and store locations.
+   
+3. **Response Formation**:
+   - The aggregated data is structured and returned in a JSON format as part of the response.
+
+### Important Notes
+
+- Ensure that the user is authenticated with a valid token before making this request.
+- The data returned is comprehensive and intended to populate an app user's dashboard, providing a snapshot of their account and activities.

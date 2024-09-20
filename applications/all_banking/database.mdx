@@ -1,0 +1,67 @@
+---
+id: account-database
+title: Account Database Structure
+sidebar_label: Account Database
+---
+
+## Overview
+
+This document provides an overview of the account database structure in our application, focusing on the Django models used to represent user bank accounts. Our system is designed to securely manage basic account information without storing sensitive data such as full account numbers. The data model leverages inheritance and custom save methods to ensure data integrity and up-to-date account balances.
+
+### BaseBankAccount Model
+
+The `BaseBankAccount` model serves as an abstract base class for storing common fields and methods used by different types of bank accounts. It is not meant to be instantiated directly but instead extended by other models.
+
+#### **Fields**
+
+- **`item_id`**: A unique identifier for the bank account item. This is typically an ID provided by an external service like Plaid.
+  
+- **`account_number`**: Stores the last four digits of the bank account number. We do not store the full account number to ensure security and privacy.
+
+- **`account_name`**: The name of the account, as provided by the bank.
+
+- **`account_type`**: The type of the bank account (e.g., checking, savings).
+
+- **`bank_logo`**: An image field that stores the logo of the bank, used for display purposes in the user interface.
+
+- **`balance`**: A `DecimalField` that holds the current balance of the bank account.
+
+- **`last_checked`**: A timestamp field that records when the balance was last updated. This is automatically updated if the balance changes.
+
+- **`is_primary`**: A boolean field indicating whether this account is the primary account for the user.
+
+- **`bank_name`**: The name of the bank associated with the account.
+
+- **`account_id`**: A unique identifier for the bank account within our system.
+
+- **`access_token`**: Stores the access token obtained from Plaid for accessing this bank account's data. This token is essential for ongoing interactions with the account via Plaid.
+
+- **`processor_token`**: Stores the processor token used for facilitating transactions through third-party services like Dwolla.
+
+- **`location`**: A URL associated with this bank account in Dwolla, used to interact with the account via Dwolla's API.
+
+#### **Custom Save Method**
+
+The `save` method in `BaseBankAccount` is overridden to automatically update the `last_checked` field whenever the balance changes. This ensures that the timestamp accurately reflects the last time the account balance was verified.
+
+### BankAccount Model
+
+The `BankAccount` model extends `BaseBankAccount` and is used to store account information for regular app users. It includes a foreign key to the `User` model, linking each bank account to a specific user.
+
+#### **Fields**
+
+- **`user`**: A foreign key to the `User` model from Django’s built-in authentication system. This links the bank account to the app user who owns it.
+
+### MerchBankAccount Model
+
+The `MerchBankAccount` model also extends `BaseBankAccount` but is designed specifically for merchant users. It includes a foreign key to the `MerchantUser` model.
+
+#### **Fields**
+
+- **`user`**: A foreign key to the `MerchantUser` model, linking the bank account to the merchant user who owns it.
+
+### Summary
+
+Our account database structure is designed to securely manage and display user bank account information. By leveraging Plaid, we avoid storing sensitive banking details directly and instead rely on tokens to interact with bank accounts. The use of an abstract base model (`BaseBankAccount`) ensures that common fields and logic are consistently applied across different types of bank accounts, while the custom `save` method helps maintain accurate balance records.
+
+Developers working with these models should be familiar with Django’s model inheritance, custom save methods, and the use of foreign keys to establish relationships between models.

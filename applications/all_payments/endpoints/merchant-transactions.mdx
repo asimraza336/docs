@@ -1,0 +1,93 @@
+---
+id: transactions-list-api
+title: Transactions List API
+sidebar_label: Transactions List
+---
+
+# Transactions List API
+
+## Overview
+
+The `Transactions List` endpoint allows a merchant to retrieve and paginate their transaction data. This endpoint provides a detailed list of transactions, including key information about each transaction.
+
+## Endpoints
+
+| Method | Path                               | Description                                        |
+|--------|------------------------------------|----------------------------------------------------|
+| GET    | `/api/merchant/transactions/`      | Retrieves a paginated list of transactions for the authenticated merchant.|
+
+## 1. GET /api/merchant/transactions/
+
+### Description
+
+This endpoint retrieves all successful transactions for a merchant and returns them in a paginated format. The pagination allows for manageable chunks of data, which are determined by the `page` and `limit` parameters provided in the request.
+
+### Request Method
+
+`GET`
+
+### Path
+
+`/api/merchant/transactions/`
+
+### Location in Django Files
+
+`views.py`
+
+### Authentication
+
+This endpoint requires authentication using a merchant token.
+
+### Permissions
+
+The user must be an authenticated merchant.
+
+### Request Structure
+
+#### Query Parameters
+
+| Parameter   | Necessity | Type    | Description                                                                  |
+|-------------|-----------|---------|------------------------------------------------------------------------------|
+| `page`      | Required  | Integer | The current page of transactions to retrieve.                                |
+| `page_size` | Optional  | Integer | The number of transactions to include per page. Defaults to 10.              |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field     | Type    | Description                                                                |
+|-----------|---------|----------------------------------------------------------------------------|
+| `count`   | Integer | The total number of transactions available.                                 |
+| `next`    | String  | A URL to the next page of transactions, if available.                       |
+| `previous`| String  | A URL to the previous page of transactions, if available.                   |
+| `results` | List    | A list of serialized transaction objects for the current page.              |
+
+**Transaction Object Fields:**
+
+| Field               | Type    | Description                                                      |
+|---------------------|---------|------------------------------------------------------------------|
+| `id`                | Integer | The unique identifier of the transaction.                        |
+| `name`              | String  | The name of the user associated with the transaction, if available. |
+| `cashbackEarned`    | Decimal | The amount of cashback earned from the transaction.              |
+| `cashbackAmount`    | Decimal | The total cashback amount for the transaction.                   |
+| `processing_status` | String  | The status of the transaction's processing.                      |
+| `register`          | String  | Information about the register used for the transaction.         |
+| `amount`            | Decimal | The total amount of the transaction.                             |
+| `date`              | String  | The date when the transaction occurred, formatted as 'YYYY-MM-DD'.|
+
+### Error Handling
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+### Possible Status Codes
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to invalid or missing pagination parameters.
+
+**Status Code:** `401 Unauthorized`
+
+This status code indicates that the user is not authenticated or does not have the necessary permissions to access the endpoint.
+

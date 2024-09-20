@@ -1,0 +1,189 @@
+---
+id: bank-account-management
+title: Bank Account Management
+sidebar_label: Bank Account Management
+---
+
+# Bank Account Management
+
+## Overview
+
+This section provides an overview of the endpoints used to manage bank accounts for app users. These endpoints allow users to update their primary bank account, delete a bank account, and check or update their bank account balance.
+
+## Endpoints
+
+| Method | Path                                   | Description                                                      |
+|--------|----------------------------------------|------------------------------------------------------------------|
+| POST   | `api/appUser/update-bank-account/`        | Handles updating a bank account, making it the primary account.  |
+| DELETE | `/api/appUser/update-bank-account/`        | Handles deleting a bank account.                                 |
+| POST   | `/api/appUser/check-and-update-balance/`   | Handles checking and updating the balance of a bank account.     |
+
+## 1. POST /api/appUser/update-bank-account/
+
+### Description
+
+This endpoint is used to update a bank account, making it the primary account for transactions.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/appUser/update-bank-account/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication. The user must be logged in as an app user and have the appropriate permissions.
+
+### Request Structure
+
+#### Headers
+
+| Header          | Necessity | Description                                  |
+|-----------------|-----------|----------------------------------------------|
+| `Authorization` | Required  | Bearer token for authentication              |
+| `Content-Type`  | Required  | `application/json`                           |
+
+#### Body Parameters
+
+| Parameter | Necessity | Type   | Description                                      |
+|-----------|-----------|--------|--------------------------------------------------|
+| `id`      | Required  | String | The ID of the bank account to be made the primary account. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field            | Type    | Description                                              |
+|------------------|---------|----------------------------------------------------------|
+| `account_updated`| Boolean | Indicates whether the account was successfully updated.  |
+
+---
+
+## 2. DELETE /api/appUser/update-bank-account/
+
+### Description
+
+This endpoint is used to delete a bank account.
+
+### Request Method
+
+`DELETE`
+
+### Path
+
+`/api/appUser/update-bank-account/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication. The user must be logged in as an app user and have the appropriate permissions.
+
+### Request Structure
+
+#### Headers
+
+| Header          | Necessity | Description                                  |
+|-----------------|-----------|----------------------------------------------|
+| `Authorization` | Required  | Bearer token for authentication              |
+| `Content-Type`  | Required  | `application/json`                           |
+
+#### Body Parameters
+
+| Parameter | Necessity | Type   | Description                                      |
+|-----------|-----------|--------|--------------------------------------------------|
+| `id`      | Required  | String | The ID of the bank account to be deleted.        |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field            | Type    | Description                                              |
+|------------------|---------|----------------------------------------------------------|
+| `account_deleted`| Boolean | Indicates whether the account was successfully deleted.  |
+
+---
+
+## 3. POST /api/appUser/check-and-update-balance/
+
+### Description
+
+This endpoint is used to check and update the balance of a bank account.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/appUser/check-and-update-balance/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication. The user must be logged in as an app user and have the appropriate permissions.
+
+### Request Structure
+
+#### Headers
+
+| Header          | Necessity | Description                                  |
+|-----------------|-----------|----------------------------------------------|
+| `Authorization` | Required  | Bearer token for authentication              |
+| `Content-Type`  | Required  | `application/json`                           |
+
+#### Body Parameters
+
+| Parameter | Necessity | Type   | Description                                      |
+|-----------|-----------|--------|--------------------------------------------------|
+| `id`      | Required  | String | The ID of the bank account to update the balance for. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field   | Type   | Description                                 |
+|---------|--------|---------------------------------------------|
+| `balance`| String | The updated balance of the bank account.    |
+
+---
+
+## Error Handling
+
+When interacting with our API, you may encounter various HTTP status codes that indicate the success or failure of your request. Below is a list of possible status codes and their meanings.
+
+### 400 Bad Request
+
+This status code indicates that the server could not understand the request due to invalid syntax. This typically occurs when validation fails for one or more fields.
+
+#### Error Response Structure
+
+Errors in this API are typically formatted as follows:
+
+**Status Code:** `400 Bad Request`
+
+| **Field**       | **Type** | **Description**                                                     |
+|:---------------:|:--------:|:-------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "an error occurred on our end." |
+
+---
+
+> **Note:** Proper error handling in your client application is crucial for providing a smooth user experience. Ensure that error messages are properly displayed to the user and that appropriate actions are taken in response to different error codes.

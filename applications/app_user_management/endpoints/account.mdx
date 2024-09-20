@@ -1,0 +1,106 @@
+id: create-app-user-account-api
+title: Create App User Account API
+sidebar_label: Create App User Account
+---
+
+# Create App User Account API
+
+This document describes the API endpoint `AccountInfoView`, which handles the creation of a new App user (consumer) account.
+
+## Endpoint
+
+| Method | Path                         | Description                                      |
+|--------|------------------------------|--------------------------------------------------|
+| POST   | `/api/appUser/register/`     | Creates a new App user (consumer) account.       |
+
+## 1. POST /api/appUser/register/
+
+### Description
+
+This endpoint creates a new App user (consumer) account with the provided user details, including first name, last name, username, password, email, and profile primary key (used for email verification).
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/appUser/register/`
+
+### Location in Django Files
+
+`app_user_management/views.py`
+
+### Authentication
+
+This endpoint does not require authentication.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+
+#### Body Parameters
+
+| Parameter    | Necessity | Type   | Description                                                |
+|--------------|-----------|--------|------------------------------------------------------------|
+| `first_name` | Required  | String | The user's first name.                                     |
+| `last_name`  | Required  | String | The user's last name.                                      |
+| `username`   | Required  | String | The desired username for the new account.                  |
+| `password`   | Required  | String | The desired password for the new account.                  |
+| `email`      | Required  | String | The user's email address.                                  |
+| `profile_pk` | Required  | Integer| The primary key of the user's profile, used for email verification. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `201 Created`
+
+| Field  | Type    | Description                                            |
+|--------|---------|--------------------------------------------------------|
+| `token`| String  | The authentication token for the newly created user.   |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to a client error, such as a validation failure.
+
+#### Example: Username Already Exists
+
+This error occurs when the provided username is already associated with an existing account.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.username`| String   | A descriptive message indicating that "Username already exists".    |
+
+### Workflow
+
+1. **Email Verification**: 
+   - The `profile_pk` is used to verify if the email associated with the profile has been verified.
+   
+2. **User Registration**:
+   - The `SignUpSerializer` validates and creates the new user account.
+   - The username and email are checked for uniqueness. If a conflict is found, an appropriate error is raised.
+   
+3. **Account Creation**:
+   - After successfully creating the user account, additional setup may include linking with external services.
+   
+4. **Token Generation**:
+   - Upon successful account creation, an authentication token is generated and returned in the response.
+
+### Important Notes
+
+- Ensure that the profile associated with `profile_pk` is verified before making this request.
+- The password should be strong and meet the application's security requirements.

@@ -1,0 +1,109 @@
+id: confirm-email-otp-api
+title: Confirm Email OTP API
+sidebar_label: Confirm Email OTP
+---
+
+# Confirm Email OTP API
+
+## Overview
+
+The `Confirm Email OTP` endpoint is designed to verify a user's email address by confirming a One-Time Password (OTP) sent to that email. Upon successful verification, the endpoint confirms the email address and returns the associated profile's primary key (`profile_pk`).
+
+## Endpoints
+
+| Method | Path                          | Description                                       |
+|--------|-------------------------------|---------------------------------------------------|
+| POST   | `/api/confirm-email-otp/`     | Confirms an OTP for email verification.           |
+
+## 1. POST /api/confirm-email-otp/
+
+### Description
+
+This endpoint allows users to confirm their email address by submitting an OTP sent to them via email. If the OTP matches the one stored for the user's profile, the email is confirmed, and the primary key of the profile is returned.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/confirm-email-otp/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint does not require authentication.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+
+#### Body Parameters
+
+| Parameter    | Necessity | Type    | Description                                             |
+|--------------|-----------|---------|---------------------------------------------------------|
+| `otp`        | Required  | String  | The OTP sent to the user's email for verification.       |
+| `profile_pk` | Required  | Integer | The primary key of the user's profile associated with the email. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field       | Type    | Description                                         |
+|-------------|---------|-----------------------------------------------------|
+| `profile_pk`| Integer | The primary key of the user's profile.              |
+| `email`     | String  | The confirmed email address.                        |
+
+### Error Handling
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+### Possible Status Codes
+
+#### Error Response Structure
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not understand the request due to invalid syntax. This typically occurs when validation fails for one or more fields.
+
+##### Example 1: Profile Not Found
+
+This error occurs when the provided `profile_pk` does not match any existing profile in the system.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "Email not found."           |
+
+##### Example 2: Invalid OTP
+
+This error occurs when the provided OTP does not match the OTP associated with the given `profile_pk`.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.otp`   | String   | A descriptive message indicating that "Invalid code entered."      |
+
+##### Example 3: Internal Server Error
+
+This error occurs when an unexpected error happens during the email verification process.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "An error occurred on our end." |

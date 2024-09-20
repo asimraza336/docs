@@ -1,0 +1,142 @@
+---
+id: Tokens
+title: Token Creators
+sidebar_label: Token Creators
+---
+
+# Plaid Token Creation
+
+## Overview
+
+This document provides a comprehensive overview of the endpoints used to create Plaid Link tokens for different user types: app users and merchant users. These tokens are essential for securely linking a user's bank account to the application via the Plaid service.
+
+---
+
+## Endpoints
+
+| **Method** | **Path**                               | **Description**                                               |
+|:----------:|:---------------------------------------|:--------------------------------------------------------------|
+| **GET**    | `/api/appUser/token/create/android/`   | Handles the creation of a Plaid Link token for an app user.    |
+| **GET**    | `/api/merchant/token/create/browser/`  | Handles the creation of a Plaid Link token for a merchant user.|
+
+---
+
+## 1. GET /api/appUser/token/create/android/
+
+### Description
+
+This endpoint handles the creation of a Plaid Link token for an app user on the Android platform. The token is used to securely link a user's bank account to the application via the Plaid service.
+
+### Request Method
+
+`GET`
+
+### Path
+
+`/api/appUser/token/create/android/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication. The user must be logged in as an app user and have the appropriate permissions.
+
+---
+
+### Request Structure
+
+#### Headers
+
+Include the following headers in your request:
+
+| **Header**        | **Necessity** | **Description**                              |
+|:-----------------:|:-------------:|:---------------------------------------------|
+| `Authorization`   | **Required**  | Bearer token for authentication              |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| **Field**       | **Type** | **Description**                                                   |
+|:---------------:|:--------:|:------------------------------------------------------------------|
+| `link_token`    | String   | The Plaid Link token used to link the user's bank account.        |
+| `expiration`    | String   | The expiration time of the token in ISO 8601 format.             |
+| `request_id`    | String   | The request identifier for tracking the request.                 |
+
+#### Error Response
+
+Errors in this API are typically formatted as follows:
+
+**Status Code:** `400 Bad Request`
+
+| **Field**       | **Type** | **Description**                                                     |
+|:---------------:|:--------:|:-------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "an error occurred on our end." |
+---
+
+## 2. GET /api/merchant/token/create/browser/
+
+### Description
+
+This endpoint handles the creation of a Plaid Link token for a merchant user on a web browser. The token is used to securely link the merchant's bank account to the application via the Plaid service.
+
+### Request Method
+
+`GET`
+
+### Path
+
+`/api/merchant/token/create/browser/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication. The user must be logged in as a merchant user and have the appropriate permissions.
+
+---
+
+### Request Structure
+
+#### Headers
+
+Include the following headers in your request:
+
+| **Header**        | **Necessity** | **Description**                              |
+|:-----------------:|:-------------:|:---------------------------------------------|
+| `Authorization`   | **Required**  | Bearer token for authentication              |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| **Field**       | **Type** | **Description**                                                   |
+|:---------------:|:--------:|:------------------------------------------------------------------|
+| `link_token`    | String   | The Plaid Link token used to link the merchant's bank account.    |
+| `expiration`    | String   | The expiration time of the token in ISO 8601 format.             |
+| `request_id`    | String   | The request identifier for tracking the request.                 |
+
+#### Error Response
+
+Errors in this API are typically formatted as follows:
+
+**Status Code:** `400 Bad Request`
+
+| **Field**       | **Type** | **Description**                                                     |
+|:---------------:|:--------:|:-------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "an error occurred on our end." |
+     |
+
+---
+
+> **Note:** Proper error handling in your client application is crucial for providing a smooth user experience. Ensure that error messages are properly displayed to the user and that appropriate actions are taken in response to different error codes.

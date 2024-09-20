@@ -1,0 +1,84 @@
+---
+id: create-merchant-account-api
+title: Create Merchant Account API
+sidebar_label: Create Merchant Account
+---
+
+# Create Merchant Account API
+
+This document describes the API endpoint `AccountInfoView`, which handles the creation of a new merchant user account.
+
+## Endpoint
+
+| Method | Path                             | Description                                           |
+|--------|----------------------------------|-------------------------------------------------------|
+| POST   | `/api/merchant/account_info/`  | Creates a new merchant user account.                  |
+
+## 1. POST /api/merchant/account_info/
+
+### Description
+
+This endpoint creates a new merchant user account with the provided username, password, and email address.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/account_info/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint does not require authentication.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+
+#### Body Parameters
+
+| Parameter  | Necessity | Type   | Description                                         |
+|------------|-----------|--------|-----------------------------------------------------|
+| `username` | Required  | String | The desired username for the new account.           |
+| `password` | Required  | String | The desired password for the new account.           |
+| `email`    | Required  | String | The user's email address.                           |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `201 Created`
+
+| Field  | Type    | Description                                            |
+|--------|---------|--------------------------------------------------------|
+| `token`| String  | The authentication token for the newly created user.   |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to a client error, such as a validation failure.
+
+#### Example: Username Already Exists
+
+This error occurs when the provided username is already associated with an existing account.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.username`| String   | A descriptive message indicating that "Username already exists".    |

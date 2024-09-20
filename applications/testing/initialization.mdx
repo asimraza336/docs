@@ -1,0 +1,92 @@
+---
+id: base-api-testcase
+title: Base API Test Case
+sidebar_label: Base API Test Case
+---
+
+# Base API Test Case
+
+## Overview
+
+The `BaseApiTestCase` class provides a robust and modularized approach to setting up test environments for various Django apps. This test case structure simplifies API testing by automating the initialization of test data across different apps. It allows for selective data initialization through various flags and keyword arguments, ensuring that tests are as efficient and focused as possible.
+
+The class integrates with several setup functions, each responsible for initializing models and data specific to a particular Django app. This modular approach makes the test suite flexible and scalable, enabling easy testing across multiple app domains.
+
+## Key Features
+
+### 1. **Default Initialization**
+
+By default, all relevant models are initialized when a test is run. This allows for comprehensive testing where multiple interdependent components (e.g., merchant users, registers, payments, cashback) are involved. However, to optimize testing and avoid unnecessary data setup, the `setUp` method provides mechanisms to disable default initialization or selectively enable only the required models.
+
+### 2. **Disabling Default Initialization**
+
+To disable the default initialization of all models, you can pass `allFalse=True` to the `setUp` method. This ensures that no models are initialized unless explicitly enabled by the developer. This is useful when a test case requires complete control over which models should be initialized and avoids unnecessary overhead.
+
+### 3. **Selective Initialization**
+
+In many cases, you may only need to initialize a subset of models. The `setUp` method allows you to selectively initialize or skip specific models by passing them as keyword arguments. Set the keyword argument to `False` to skip the initialization of a particular model.
+
+For example, if you want to initialize only the `MerchantUser` and `Transaction` models, you can disable the others by setting them to `False`. This selective initialization feature ensures that the test suite remains efficient by only setting up the necessary data for each test case.
+
+### 4. **Accessing Initialized Data**
+
+Once the test environment is set up, the initialized data can be accessed through instance variables. These variables are named based on the model and a number that indicates the instance order (e.g., `MerchantUser1`, `Transaction2`). This allows you to easily access and manipulate the test data directly within your test cases.
+
+For instance:
+- `self.MerchantUser1` refers to the first instance of the `MerchantUser` model.
+- `self.Transaction2` refers to the second instance of the `Transaction` model.
+
+### 5. **Modular Setup Functions**
+
+Each Django app has its own `test_setup.py` file, containing a `setup_<app_name>` function responsible for initializing that app's models. The `BaseApiTestCase` class imports and uses these setup functions to modularize the initialization process. This approach keeps the setup logic clean and separated by app, improving maintainability and scalability.
+
+Examples of setup functions include:
+- `setup_merchant_user`: Initializes merchant-related models, such as `MerchantUser`, `BusinessProfile`, etc.
+- `setup_dwolla`: Initializes models related to the `Dwolla` API.
+- `setup_store_locations`: Initializes store location-related models, such as `MerchantLocation`.
+
+This modular approach makes it easy to add new app setups to the test environment by simply defining a `setup_<app_name>` function and calling it within the `setUp` method.
+
+### 6. **Adding New App Setup**
+
+If a new Django app is added to the project, you can easily integrate its setup into the `BaseApiTestCase` by:
+1. Creating a `test_setup.py` file in the app directory.
+2. Defining a `setup_<app_name>` function that initializes the app's models.
+3. Importing and calling this setup function in the `BaseApiTestCase` class’s `setUp` method.
+
+This ensures that the test suite remains adaptable and scalable as the project grows.
+
+### 7. **Common Parameters and Selective User Initialization**
+
+The `BaseApiTestCase` class provides additional parameters, such as `is_merchant`, `is_register`, and `is_consumer`, which control the initialization of specific types of users. These parameters determine the default user context in the test environment, such as which token is included in the request header and which user is associated with `request.user`.
+
+#### `is_merchant`
+- When `is_merchant` is set to `True`, the test environment initializes merchant-specific data. The API calls are made using a merchant user’s token, and `request.user` is set to the merchant user. This setup is crucial when testing scenarios where a merchant interacts with the system, such as managing business profiles, initiating transactions, or accessing merchant-related services.
+
+#### `is_register`
+- Setting `is_register` to `True` initializes data for register users, such as register-specific credentials, IDs, and event data. In this case, the API requests are made on behalf of a register user, with the appropriate token in the request header and `request.user` set to the register user. This setup is essential for testing interactions related to point-of-sale systems, cashier functionality, and register-specific APIs.
+
+#### `is_consumer`
+- When `is_consumer` is enabled, the environment is set up for consumer users. The API calls are authenticated using a consumer user's token, and `request.user` is set to the consumer. This setup is vital for tests involving customer interactions, such as purchasing processes, consumer cashback rewards, or user profile management.
+
+These parameters help simulate real-world scenarios by ensuring that the correct user context is set for each test case, whether it involves a merchant, register, or consumer user.
+
+### 8. **Common Models and Keyword Arguments**
+
+You can control the initialization of specific models by using their names as keyword arguments in the `setUp` method. Common models include:
+- `ControllerProfile`
+- `BusinessProfile`
+- `OwnerProfile`
+- `MerchantDwollaApiProfile`
+- `Document`
+- `MerchantLocation`
+- `CashbackOffer`
+- `MerchBankAccount`
+- `RegisterUser`
+- `Transaction`
+
+By passing these as keyword arguments and setting them to `False`, you can selectively skip the initialization of any of these models.
+
+## Conclusion
+
+The `BaseApiTestCase` class is a powerful tool for efficiently setting up and managing test data across multiple Django apps. Its modularized structure, combined with the ability to selectively initialize models and user types, makes it highly adaptable and scalable for various test scenarios. The additional parameters, such as `is_merchant`, `is_register`, and `is_consumer`, provide fine-grained control over user context, ensuring accurate and realistic API testing.

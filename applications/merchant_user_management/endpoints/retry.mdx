@@ -1,0 +1,120 @@
+---
+id: user-retry-verification-api
+title: User Retry Verification API
+sidebar_label: Retry Verification
+---
+
+# User Retry Verification API
+
+This document describes the API endpoint `UserRetryVerificationAPIView`, which handles resubmitting verification information to Dwolla for a merchant user.
+
+## Endpoint
+
+| Method | Path                                     | Description                                                            |
+|--------|------------------------------------------|------------------------------------------------------------------------|
+| POST   | `/api/merchant/retry-info/`      | Resubmits verification information to Dwolla for the authenticated merchant user. |
+
+## 1. POST /api/merchant/retry-info/
+
+### Description
+
+This endpoint handles POST requests for resubmitting verification information to Dwolla.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/retry-info/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication as a merchant user.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+| `Authorization`| Required  | Bearer token for merchant authentication. |
+
+#### Body Parameters
+
+| Parameter        | Necessity | Type     | Description                                                                      |
+|------------------|-----------|----------|----------------------------------------------------------------------------------|
+| `controller_data`| Optional  | Required   | A dictionary containing the updated controller's information.                    |
+| `controller_data.first_name`  | Optional  | String   | The controller's first name.                                                     |
+| `controller_data.last_name`   | Optional  | String   | The controller's last name.                                                      |
+| `controller_data.title`       | Optional  | String   | The controller's job title.                                                      |
+| `controller_data.date_of_birth`| Optional  | String   | The controller's date of birth (format: YYYY-MM-DD).                             |
+| `controller_data.ssn`         | Optional  | String   | The controller's Social Security Number (format: 111-11-1111).                   |
+| `controller_data.address`     | Optional  | Object   | A dictionary containing the controller's address (if `address` key is present, the full address structure must be provided).|
+| `controller_data.address.address` | Required  | String   | The street address.                                                              |
+| `controller_data.address.city`    | Required  | String   | The city.                                                                        |
+| `controller_data.address.state`   | Required  | String   | The state.                                                                       |
+| `controller_data.address.zip_code`| Required  | String   | The zip code.                                                                    |
+| `owner_data`    | Required  | Array    | A list of dictionaries, each containing updated owner information.               |
+| `owner_data[].first_name`     | Optional  | String   | The owner's first name.                                                          |
+| `owner_data[].last_name`      | Optional  | String   | The owner's last name.                                                           |
+| `owner_data[].date_of_birth`  | Optional  | String   | The owner's date of birth (format: YYYY-MM-DD).                                  |
+| `owner_data[].ssn`            | Optional  | String   | The owner's Social Security Number (format: 111-11-1111).                        |
+| `owner_data[].address`        | Optional  | Object   | A dictionary containing the owner's address (if `address` key is present, the full address structure must be provided).|
+| `owner_data[].address.address`| Required  | String   | The street address.                                                              |
+| `owner_data[].address.city`   | Required  | String   | The city.                                                                        |
+| `owner_data[].address.state`  | Required  | String   | The state.                                                                       |
+| `owner_data[].address.zip_code`| Required | String   | The zip code.                                                                    |
+| `business_data` | Required  | Object   | A dictionary containing the updated business information.                        |
+| `business_data.business_name`           | Optional | String   | The business name.                                                               |
+| `business_data.business_classification` | Optional | String   | The business classification.                                                     |
+| `business_data.business_classification_id` | Optional | String   | The business classification ID.                                                  |
+| `business_data.business_structure`      | Optional | String   | The business structure (e.g., Sole Proprietorship).                              |
+| `business_data.address`                 | Optional | Object   | A dictionary containing the business address (if `address` key is present, the full address structure must be provided).|
+| `business_data.address.address`         | Required | String   | The street address.                                                              |
+| `business_data.address.city`            | Required | String   | The city.                                                                        |
+| `business_data.address.state`           | Required | String   | The state.                                                                       |
+| `business_data.address.zip_code`        | Required | String   | The zip code.                                                                    |
+| `business_data.doing_business_as`       | Optional | String   | The DBA (Doing Business As) name.                                                |
+| `business_data.website`                 | Optional | String   | The business website URL.                                                        |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field   | Type   | Description                                                   |
+|---------|--------|---------------------------------------------------------------|
+| `service` | String | A message indicating that the updated information has been submitted to Dwolla. |
+
+### Error Handling
+
+Errors in this API are returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to a client error, such as a validation failure.
+
+#### Example Error Responses
+
+- **Missing or Invalid SSN:**
+
+    | Field   | Type   | Description                                                      |
+    |---------|--------|------------------------------------------------------------------|
+    | `error` | String | A message indicating that "You must provide a valid 9-digit SSN" |
+
+- **Server Error:**
+
+    | Field   | Type   | Description                                                      |
+    |---------|--------|------------------------------------------------------------------|
+    | `error` | String | A message indicating that "An error occurred on our end"         |

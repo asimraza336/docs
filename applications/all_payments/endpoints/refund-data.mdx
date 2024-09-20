@@ -1,0 +1,90 @@
+---
+id: refund-data-api
+title: Refund Data API
+sidebar_label: Refund Data
+---
+
+# Refund Data API
+
+## Overview
+
+The `Refund Data` endpoint handles POST requests for fetching refundable transactions associated with a specific user. The user must provide their unique identifier (`user_id`) to retrieve the refundable transactions.
+
+## Endpoints
+
+| Method | Path                                    | Description                                         |
+|--------|-----------------------------------------|-----------------------------------------------------|
+| POST   | `/api/register/transactions/refund-data/` | Retrieves a list of refundable transactions for a user. |
+
+## 1. POST /api/register/transactions/refund-data/
+
+### Description
+
+This endpoint fetches refundable transactions for the user identified by the provided `user_id`. The list of refundable transactions will include the transaction ID, amount, and date of the transaction.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/register/transactions/refund-data/`
+
+### Location in Django Files
+
+`views.py`
+
+### Authentication
+
+This endpoint requires authentication using a valid token, which should be passed as part of the request header.
+
+### Permissions
+
+This endpoint requires the user to have appropriate permissions to retrieve refund data.
+
+### Request Structure
+
+#### Body Parameters
+
+| Parameter  | Necessity | Type   | Description                                         |
+|------------|-----------|--------|-----------------------------------------------------|
+| `user_id`  | Required  | String | The unique identifier of the user whose refundable transactions are being requested. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field                  | Type    | Description                                         |
+|------------------------|---------|-----------------------------------------------------|
+| `id`                   | String  | The unique identifier of the refundable transaction.|
+| `transaction_amount`    | Float   | The amount of the refundable transaction.           |
+| `date`                 | String  | The date when the transaction occurred (YYYY-MM-DD).|
+
+#### Error Response
+
+**Status Code:** `400 Bad Request`
+
+| Field            | Type    | Description                                         |
+|------------------|---------|-----------------------------------------------------|
+| `error`          | String  | An error message specifying the issue encountered.  |
+| `invalid_user_id`| String  | Indicates that the provided `user_id` is invalid or not found. |
+
+### Error Handling
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+#### Possible Status Codes
+
+**Status Code:** `200 OK`
+
+This status code indicates that the refundable transactions were successfully retrieved.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the request could not be processed, possibly due to an invalid or missing `user_id`.
+
+**Status Code:** `401 Unauthorized`
+
+This status code indicates that the provided authentication token is invalid or missing.

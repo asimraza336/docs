@@ -1,0 +1,94 @@
+---
+id: create-business-info-api
+title: Create Business Info API
+sidebar_label: Create Business Info
+---
+
+# Create Business Info API
+
+This document describes the API endpoint `BusinessInfoView`, which handles the creation of a business profile and submits it to Dwolla for verification.
+
+## Endpoint
+
+| Method | Path                           | Description                                                  |
+|--------|--------------------------------|--------------------------------------------------------------|
+| POST   | `/api/merchant/business_info/` | Creates a business profile and submits it to Dwolla for verification. |
+
+## 1. POST /api/merchant/business_info/
+
+### Description
+
+This endpoint creates a business profile associated with the authenticated merchant user and submits it to Dwolla for verification.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/business_info/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication as a merchant user.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+| `Authorization`| Required  | Bearer token for merchant authentication. |
+
+#### Body Parameters
+
+| Parameter                   | Necessity | Type     | Description                                                                  |
+|-----------------------------|-----------|----------|------------------------------------------------------------------------------|
+| `business_name`             | Required  | String   | The name of the business.                                                    |
+| `business_classification`   | Required  | String   | The business classification (e.g., "Retail").                                |
+| `business_classification_id`| Required  | String   | The business classification ID (e.g., "12345").                              |
+| `business_structure`        | Required  | String   | The business structure (e.g., "Sole Proprietorship", "LLC", "Partnership").  |
+| `ein`                       | Optional  | String   | The Employer Identification Number (EIN).                                    |
+| `address`                   | Required  | Object   | A dictionary containing the business address.                                |
+| `address.address`           | Required  | String   | The street address.                                                          |
+| `address.city`              | Required  | String   | The city.                                                                    |
+| `address.state`             | Required  | String   | The state.                                                                   |
+| `address.zip_code`          | Required  | String   | The zip code.                                                                |
+| `doing_business_as`         | Optional  | String   | The business's "doing business as" (DBA) name.                               |
+| `website`                   | Optional  | String   | The business's website URL.                                                  |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field    | Type   | Description                                                   |
+|----------|--------|---------------------------------------------------------------|
+| `service`| String | A message indicating that the business profile has been created and submitted to Dwolla. |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to a client error, such as a validation failure.
+
+#### Always Returned Error
+
+Regardless of the error type, the API will always return an error object with the following structure:
+
+| **Field**       | **Type** | **Description**                                                      |
+|-----------------|----------|----------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.                 |
+| `error.error`   | String   | A descriptive message indicating that "An error occurred on our end" |

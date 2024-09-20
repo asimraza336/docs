@@ -1,0 +1,88 @@
+---
+id: sign-in-merchant-account-api
+title: Sign-In Merchant Account API
+sidebar_label: Sign-In Merchant Account
+---
+
+# Sign-In Merchant Account API
+
+This document describes the API endpoint `SignInAPIView`, which handles the sign-in process for a merchant user.
+
+## Endpoint
+
+| Method | Path                        | Description                                |
+|--------|-----------------------------|--------------------------------------------|
+| POST   | `/api/merchant/sign-in/`     | Signs in a merchant user with credentials. |
+
+## 1. POST /api/merchant/sign-in/
+
+### Description
+
+This endpoint signs in a merchant user with the provided username and password.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/sign-in/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint does not require prior authentication, as it is used to obtain authentication credentials.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+
+#### Body Parameters
+
+| Parameter  | Necessity | Type   | Description                                         |
+|------------|-----------|--------|-----------------------------------------------------|
+| `username` | Required  | String | The merchant's username.                            |
+| `password` | Required  | String | The merchant's password.                            |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field   | Type    | Description                                                   |
+|---------|---------|---------------------------------------------------------------|
+| `token` | String  | The authentication token for the signed-in user.              |
+| `status`| String  | The user's verification status (`controller`, `business`, `certified`, `pending`). |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to invalid credentials.
+
+| Field        | Type    | Description                                             |
+|--------------|---------|---------------------------------------------------------|
+| `username`   | String  | An empty string           |
+| `password`   | String  | A message indicating "Incorrect username and password". |
+
+### Notes
+
+- The `status` field in the response indicates the user's verification status:
+  - `controller`: The user has submitted controller information.
+  - `business`: The user has submitted business information.
+  - `certified`: The user is fully verified.
+  - `pending`: The user's verification is pending.

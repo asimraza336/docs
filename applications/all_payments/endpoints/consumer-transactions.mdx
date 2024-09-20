@@ -1,0 +1,122 @@
+id: app-user-transactions-api
+title: App User Transactions API
+sidebar_label: App User Transactions
+---
+
+# App User Transactions API
+
+This document describes the API endpoint `ConsumerTransactionsListAPIView`, which handles the retrieval and pagination of transaction data for a given app user (consumer).
+
+## Endpoint
+
+| Method | Path                          | Description                                                     |
+|--------|-------------------------------|-----------------------------------------------------------------|
+| GET    | `/api/appUser/transactions/`  | Retrieves and paginates the transaction data for the app user.  |
+
+## 1. GET /api/appUser/transactions/
+
+### Description
+
+This endpoint retrieves and paginates the transaction data for the authenticated app user. It fetches all successful transactions associated with the user and allows pagination through request parameters.
+
+### Request Method
+
+`GET`
+
+### Path
+
+`/api/appUser/transactions/`
+
+### Location in Django Files
+
+`app_user_management/views.py`
+
+### Authentication
+
+This endpoint requires authentication via a valid token.
+
+### Permissions
+
+Only accessible by authenticated app users.
+
+### Request Structure
+
+#### Headers
+
+| Header          | Necessity | Description                                  |
+|-----------------|-----------|----------------------------------------------|
+| `Authorization` | Required  | Bearer token for authentication              |
+| `Content-Type`  | Required  | `application/json`                           |
+
+#### Query Parameters
+
+| Parameter  | Necessity | Type   | Description                                      |
+|------------|-----------|--------|--------------------------------------------------|
+| `page`     | Optional  | Integer| The current page of transactions to retrieve.    |
+| `page_size`| Optional  | Integer| The number of transactions to include per page. Defaults to 10 if not specified. |
+
+### Response Structure
+
+**Status Code:** `200 OK`
+
+The response is a JSON object containing the following sections:
+
+| Field       | Type    | Description                                                                 |
+|-------------|---------|-----------------------------------------------------------------------------|
+| `results`   | Array   | A list of serialized transaction objects for the current page. Each transaction includes details like `id`, `name`, `status`, `type`, `amount`, and `date`. |
+| `count`     | Integer | The total number of transactions available.                                  |
+| `next`      | String  | A URL to the next page of transactions, if available.                        |
+| `previous`  | String  | A URL to the previous page of transactions, if available.                    |
+
+### Detailed Field Descriptions
+
+#### `results` (Array)
+
+| Field   | Type    | Description                                                                 |
+|---------|---------|-----------------------------------------------------------------------------|
+| `id`    | Integer | The unique identifier of the transaction.                                    |
+| `name`  | String  | The name of the consumer associated with the transaction.                    |
+| `status`| String  | The status of the transaction's processing (e.g., "Success").                |
+| `type`  | String  | The type of transaction (e.g., "Restaurant").                                |
+| `amount`| String  | The total amount of the transaction.                                         |
+| `date`  | String  | The date when the transaction occurred, formatted as 'YYYY-MM-DD'.           |
+
+#### `count` (Integer)
+
+| Field    | Type    | Description                                      |
+|----------|---------|--------------------------------------------------|
+| `count`  | Integer | The total number of transactions available.      |
+
+#### `next` (String)
+
+| Field    | Type    | Description                                      |
+|----------|---------|--------------------------------------------------|
+| `next`   | String  | A URL to the next page of transactions, if available. |
+
+#### `previous` (String)
+
+| Field    | Type    | Description                                      |
+|----------|---------|--------------------------------------------------|
+| `previous`| String | A URL to the previous page of transactions, if available. |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to a client error.
+
+### Workflow
+
+1. **Transaction Retrieval**:
+   - The service fetches all successful transactions for the specified consumer.
+   
+2. **Pagination**:
+   - The retrieved transactions are then paginated to break them into manageable chunks.
+   - The pagination process involves determining the number of items per page and which page of items should be returned based on the request parameters.
+
+### Important Notes
+
+- Ensure that the user is authenticated with a valid token before making this request.
+- The data returned is intended to provide a paginated view of the user's transaction history.

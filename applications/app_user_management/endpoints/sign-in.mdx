@@ -1,0 +1,99 @@
+id: app-user-sign-in-api
+title: App User Sign-In API
+sidebar_label: App User Sign-In
+---
+
+# App User Sign-In API
+
+This document describes the API endpoint `SignInAPIView`, which handles the sign-in process for an App user (consumer).
+
+## Endpoint
+
+| Method | Path                   | Description                        |
+|--------|------------------------|------------------------------------|
+| POST   | `/api/appUser/login/`  | Signs in an existing App user.     |
+
+## 1. POST /api/appUser/login/
+
+### Description
+
+This endpoint allows an existing App user (consumer) to sign in using their username and password.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/appUser/login/`
+
+### Location in Django Files
+
+`app_user_management/views.py`
+
+### Authentication
+
+This endpoint does not require authentication for access, as it is used to obtain authentication credentials.
+
+### Permissions
+
+None
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Content-Type` | Required  | `application/json`                  |
+
+#### Body Parameters
+
+| Parameter  | Necessity | Type   | Description                                    |
+|------------|-----------|--------|------------------------------------------------|
+| `username` | Required  | String | The user's username.                           |
+| `password` | Required  | String | The user's password.                           |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field  | Type    | Description                                            |
+|--------|---------|--------------------------------------------------------|
+| `token`| String  | The authentication token for the signed-in user.       |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to a client error, such as incorrect credentials.
+
+#### Example: Invalid Username or Password
+
+This error occurs when the provided username or password is incorrect.
+
+| **Field**   | **Type** | **Description**                                               |
+|-------------|----------|---------------------------------------------------------------|
+| `username`  | String   | An empty string is returned to indicate an issue with the username. |
+| `password`  | String   | A message indicating "Incorrect username and password" is returned. |
+
+### Workflow
+
+1. **Credential Validation**:
+   - The provided username and password are checked against the stored credentials.
+   - If the credentials are valid, the user is authenticated.
+   
+2. **Token Generation**:
+   - Upon successful sign-in, an authentication token is generated and returned in the response.
+   
+3. **Error Handling**:
+   - If the username or password is invalid, an error is returned with a message indicating the issue.
+
+### Important Notes
+
+- Ensure that the username and password provided match the user's registered credentials.
+- For security reasons, it is important to handle errors in a way that does not reveal which part of the credentials was incorrect.

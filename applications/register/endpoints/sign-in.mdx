@@ -1,0 +1,86 @@
+---
+id: register-sign-in-api
+title: Register Sign-In API
+sidebar_label: Register Sign-In
+---
+
+# Register Sign-In API
+
+## Overview
+
+The `RegisterSignIn` endpoint handles POST requests for signing in registered users. The user must provide their username and password, and upon successful authentication, a token, register number, and a list of associated locations will be returned.
+
+## Endpoints
+
+| Method | Path                    | Description                                  |
+|--------|-------------------------|----------------------------------------------|
+| POST   | `/api/register/sign-in/` | Signs in a registered user with credentials. |
+
+## 1. POST /api/register/sign-in/
+
+### Description
+
+This endpoint is used to sign in a registered user. It authenticates the user based on the provided username and password. The response includes a token, register number, and a list of locations associated with the user.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/register/sign-in/`
+
+### Location in Django Files
+
+`views.py`
+
+### Authentication
+
+This endpoint does not require an initial token, but a valid username and password must be provided for authentication.
+
+### Permissions
+
+No special permissions are required for this endpoint.
+
+### Request Structure
+
+#### Body Parameters
+
+| Parameter        | Necessity | Type    | Description                                                   |
+|------------------|-----------|---------|---------------------------------------------------------------|
+| `username`       | Required  | String  | The username of the registered user.                          |
+| `password`       | Required  | String  | The password of the registered user.                          |
+| `register_number`| Optional  | Integer | The user's register number. If not provided, a new one will be assigned. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field              | Type    | Description                                              |
+|--------------------|---------|----------------------------------------------------------|
+| `token`            | String  | The authentication token for the signed-in user.         |
+| `register_number`  | Integer | The assigned register number for the user.               |
+| `register_event_id`| String  | The unique event ID for the user's sign-in.              |
+| `locations`        | Array   | A list of locations associated with the user.            |
+| `locations[].id`   | Integer | The unique ID of the location.                           |
+| `locations[].address`| String | The address of the location.                            |
+
+### Error Handling
+
+Various HTTP status codes may be returned to indicate the result of the request.
+
+#### Possible Status Codes
+
+**Status Code:** `400 Bad Request`
+
+| Field      | Type    | Description                                         |
+|------------|---------|-----------------------------------------------------|
+| `error`    | Object  | An object containing details about the error.       |
+| `username` | String  | Error related to the username (e.g., invalid).      |
+| `password` | String  | Error related to the password (e.g., invalid).      |
+
+**Status Code:** `401 Unauthorized`
+
+This status code indicates that the provided credentials were incorrect.

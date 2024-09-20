@@ -32,16 +32,14 @@
     }
   ],
   
-
-
-
-
   
   "navigation": [
     {
       "group": "Docs",
       "pages": [
+        "docs/intro",
         "docs/overview",
+        "docs/strucure",
         "docs/backend_setup_guide"
       ]
     },
@@ -53,13 +51,236 @@
         "docs/code-guidelines/endpoint-structure"
       ]
     },
+    {
+      "group": "Error Handling",
+      "pages": [
+        "docs/error-handling/error-handling",
+        "docs/error-handling/serializer-error-handling",
+        "docs/error-handling/user-verification",
+        "docs/error-handling/verify-data-structure"
+      ]
+    },
+    {
+      "group": "End-User",
+      "pages": [
+        "docs/enduser/register-user",
+        "docs/enduser/merchant-user",
+        "docs/enduser/consumer-user"
+      ]
+    },
+    {
+      "group": "External Api Guide",
+      "pages": [
+        "docs/external-api-guide/external-apis",
+        "docs/external-api-guide/dwolla",
+        "docs/external-api-guide/banking"
+      ]
+    },
 
+    {
+      "group": "Introduction",
+      "pages": [
+        "applications/introduction"
+      ]
+    },
+    {
+      "group": "all_banking",
+      "pages": [
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/all_banking/endpoints/account-update",
+                "applications/all_banking/endpoints/token-creator",
+                "applications/all_banking/endpoints/token-exchange-saving"
 
+              ]
+          },
+          "applications/all_banking/database",
+          "applications/all_banking/about"
+      ]
+    },
+
+    {
+      "group": "all_communications",
+      "pages": [
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/all_communications/endpoints/confirm-otp",
+                "applications/all_communications/endpoints/send-sign-up",
+                "applications/all_communications/endpoints/update-email"
+
+              ]
+          },
+          "applications/all_communications/database",
+          "applications/all_communications/about"
+      ]
+    },
+
+    {
+      "group": "all_payments",
+      "pages": [
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/all_payments/endpoints/consumer-transactions",
+                "applications/all_payments/endpoints/create-transaction",
+                "applications/all_payments/endpoints/merchant-transactions",
+                "applications/all_payments/endpoints/process-refund",
+                "applications/all_payments/endpoints/process-transaction",
+                "applications/all_payments/endpoints/refund-data",
+                "applications/all_payments/endpoints/register_transactions"
+
+              ]
+          },
+          "applications/all_payments/database",
+          "applications/all_payments/about"
+      ]
+    },
+
+    {
+      "group": "app_data_provider",
+      "pages": [
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/app_data_provider/endpoints/data"
+              ]
+          },
+          "applications/app_data_provider/database",
+          "applications/app_data_provider/about"
+      ]
+    },
+
+    {
+      "group": "app_user_management",
+      "pages": [
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/app_user_management/endpoints/account",
+                "applications/app_user_management/endpoints/change-credential",
+                "applications/app_user_management/endpoints/confirm-credential-change",
+                "applications/app_user_management/endpoints/sign-in"
+              ]
+          },
+          "applications/app_user_management/database",
+          "applications/app_user_management/about"
+      ]
+    },
+
+    
+    {
+      "group": "cashback",
+      "pages": [
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/cashback/endpoints/update-cashback"
+              ]
+          },
+          "applications/cashback/database",
+          "applications/cashback/about"
+      ]
+    },
+
+    {
+      "group": "dwolla",
+      "pages": [
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/dwolla/endpoints/document-upload",
+                "applications/dwolla/endpoints/verification-check"
+              ]
+          },
+          "applications/dwolla/database",
+          "applications/dwolla/about"
+      ]
+    },
+
+    {
+      "group": "endpoint-structure",
+      "pages": [
+        "applications/endpoint-structure/data-validation",
+        "applications/endpoint-structure/error_handling",
+        "applications/endpoint-structure/token-validation"
+      ]
+    },
+
+    {
+      "group": "merchant_data_provider",
+      "pages": [
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/merchant_data_provider/endpoints/dashboard",
+                "applications/merchant_data_provider/endpoints/main-data"
+              ]
+          },
+          "applications/merchant_data_provider/database",
+          "applications/merchant_data_provider/about"
+      ]
+    },
+
+    {
+      "group": "merchant_user_management",
+      "pages": [
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/merchant_user_management/endpoints/account",
+                "applications/merchant_user_management/endpoints/business-info",
+                "applications/merchant_user_management/endpoints/change-credential",
+                "applications/merchant_user_management/endpoints/confirm-credential-change",
+                "applications/merchant_user_management/endpoints/personal-info",
+                "applications/merchant_user_management/endpoints/retry",
+                "applications/merchant_user_management/endpoints/sign-in"
+              ]
+          },
+          "applications/merchant_user_management/database",
+          "applications/merchant_user_management/about"
+      ]
+    },
+
+    {
+      "group": "register",
+      "pages": [
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/register/endpoints/sign-in",
+                "applications/register/endpoints/sign-up"
+              ]
+          },
+          "applications/register/database",
+          "applications/register/about"
+      ]
+    },
+    
     {
       "group": "store_locations",
       "pages": [
-        "applications/store_locations/delete"
+          {
+              "group": "Endpoints",
+              "pages": [
+                "applications/store_locations/endpoints/add",
+                "applications/store_locations/endpoints/delete"
+              ]
+          },
+          "applications/store_locations/database",
+          "applications/store_locations/about"
+      ]
+    },
+
+    {
+      "group": "testing",
+      "pages": [
+        "applications/testing/initialization"
       ]
     }
+
+
+
   ]
 }

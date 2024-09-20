@@ -1,0 +1,165 @@
+id: process-transaction-api
+title: Process Transaction API
+sidebar_label: Process Transaction
+---
+
+# Process Transaction API
+
+This document describes the API endpoint `POST /api/appUser/process_transaction/`, which handles the processing of transactions, including cashback redemption, and handles outcomes like insufficient funds, payment failure, or success.
+
+## Endpoint
+
+| Method | Path                                | Description                                                  |
+|--------|-------------------------------------|--------------------------------------------------------------|
+| POST   | `/api/appUser/process_transaction/` | Processes a transaction, including handling cashback redemption. |
+
+## 1. POST /api/appUser/process_transaction/
+
+### Description
+
+This endpoint processes a transaction for the app user, including handling cashback redemption and processing the transaction through the consumer’s bank account. Based on the transaction outcome, it can return success, insufficient funds, or payment failure.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/appUser/process_transaction/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication. The user must be logged in as an app user and have the appropriate permissions.
+
+### Request Structure
+
+#### Headers
+
+| Header          | Necessity | Description                                  |
+|-----------------|-----------|----------------------------------------------|
+| `Authorization` | Required  | Bearer token for authentication              |
+| `Content-Type`  | Required  | `application/json`                           |
+
+#### Body Parameters
+
+| Parameter               | Necessity | Type   | Description                                                                      |
+|-------------------------|-----------|--------|----------------------------------------------------------------------------------|
+| `cash_amount`           | Required  | String | The amount of cash involved in the transaction.                                  |
+| `transaction_id`        | Required  | String | The unique identifier of the transaction.                                        |
+| `consumer_bank_account_id` | Required  | String | The identifier for the consumer's bank account.                                   |
+| `cashback_redeemed`     | Required  | String | The amount of cashback to be redeemed in the transaction.                        |
+| `register_event_id`     | Required  | String | The identifier for the event at the register related to the transaction.          |
+
+### Response Structure
+
+#### Possible Outcomes
+
+The response may vary depending on the outcome of the transaction:
+
+1. **Success Response**
+
+**Status Code:** `200 OK`
+
+| Field               | Type    | Description                                                         |
+|---------------------|---------|---------------------------------------------------------------------|
+| `transaction_status`| String  | Indicates the transaction outcome. In this case, it will be `success`. |
+| `transaction_data`  | Object  | Contains the transaction details (listed below).                    |
+| `updated_cashback`  | Object  | Contains details about updated cashback from the transaction (listed below). |
+| `total_cashback`    | String  | The total accumulated cashback after the transaction.               |
+
+**Transaction Data Fields**
+
+| Field               | Type    | Description                                                         |
+|---------------------|---------|---------------------------------------------------------------------|
+| `id`                | String  | The unique identifier for the transaction.                          |
+| `amount`            | String  | The total amount processed in the transaction.                      |
+| `date`              | String  | The date and time when the transaction was processed.               |
+| `name`              | String  | The name associated with the transaction (merchant or consumer).    |
+| `type`              | String  | The type of transaction conducted (e.g., "Retail", "Restaurant").   |
+| `status`            | String  | The status of the transaction (e.g., "successful").                 |
+
+**Updated Cashback Fields**
+
+| Field          | Type    | Description                                               |
+|----------------|---------|-----------------------------------------------------------|
+| `updated_date` | String  | The date when the cashback was updated.                   |
+| `id`           | String  | The unique identifier of the cashback transaction.        |
+| `amount`       | String  | The amount of cashback earned from this transaction.      |
+| `name`         | String  | The merchant name where the cashback was earned.          |
+| `type`         | String  | The type of merchant (e.g., "restaurant").                |
+
+2. **Insufficient Funds Response**
+
+**Status Code:** `200 OK`
+
+| Field               | Type    | Description                                                         |
+|---------------------|---------|---------------------------------------------------------------------|
+| `transaction_status`| String  | Indicates the transaction outcome. In this case, it will be `insufficient_funds`. |
+| `transaction_data`  | Object  | Contains the transaction details (listed below).                    |
+
+**Transaction Data Fields**
+
+| Field               | Type    | Description                                                         |
+|---------------------|---------|---------------------------------------------------------------------|
+| `id`                | String  | The unique identifier for the transaction.                          |
+| `amount`            | String  | The total amount processed in the transaction.                      |
+| `date`              | String  | The date and time when the transaction was processed.               |
+| `name`              | String  | The name associated with the transaction (merchant or consumer).    |
+| `type`              | String  | The type of transaction conducted (e.g., "Retail", "Restaurant").   |
+| `status`            | String  | The status of the transaction, in this case `failed` due to insufficient funds. |
+
+3. **Payment Failure Response**
+
+**Status Code:** `200 OK`
+
+| Field               | Type    | Description                                                         |
+|---------------------|---------|---------------------------------------------------------------------|
+| `transaction_status`| String  | Indicates the transaction outcome. In this case, it will be `payment_failed`. |
+| `transaction_data`  | Object  | Contains the transaction details (listed below).                    |
+
+**Transaction Data Fields**
+
+| Field               | Type    | Description                                                         |
+|---------------------|---------|---------------------------------------------------------------------|
+| `id`                | String  | The unique identifier for the transaction.                          |
+| `amount`            | String  | The total amount processed in the transaction.                      |
+| `date`              | String  | The date and time when the transaction was processed.               |
+| `name`              | String  | The name associated with the transaction (merchant or consumer).    |
+| `type`              | String  | The type of transaction conducted (e.g., "Retail", "Restaurant").   |
+| `status`            | String  | The status of the transaction, in this case `failed` due to payment failure. |
+
+4. **Server Error Response**
+
+**Status Code:** `500 Internal Server Error`
+
+| Field  | Type   | Description                                                  |
+|--------|--------|--------------------------------------------------------------|
+| `error`| Object | A descriptive message indicating that "An error occurred on our end." |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to missing or invalid data.
+
+### Workflow
+
+1. **Transaction Validation**:
+   - The input data is validated to ensure all required fields are provided and in the correct format.
+   
+2. **Transaction Processing**:
+   - Based on the input and random outcomes, the transaction is processed, including cashback redemption and cash payment.
+   
+3. **Response Formation**:
+   - The outcome of the transaction (success, insufficient funds, payment failure) is returned in a structured response.
+
+### Important Notes
+
+- Ensure all required fields are included in the request body, as missing or incorrect fields will result in validation errors.
+- The server randomly simulates different transaction outcomes.

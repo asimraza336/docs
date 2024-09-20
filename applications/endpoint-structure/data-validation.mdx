@@ -1,0 +1,50 @@
+---
+id: validate-request-data-decorator
+title: Validate Request Data Decorator
+sidebar_label: Validate Request Data
+---
+
+# Validate Request Data Decorator
+
+## Overview
+
+The `validate_request_data` decorator is used to enforce strict validation of incoming request data in Django views. It ensures that specific fields are present in the request and that the data types of these fields match the expected types. If any validation rules are violated, the decorator returns an error response to the client, providing detailed feedback on what went wrong.
+
+## Key Features
+
+### 1. Validation of Required Fields
+
+The decorator checks whether all required fields specified in the `required_fields` dictionary are present in the incoming request data. Each key in this dictionary represents the name of a field, while the value represents the expected data type (e.g., `str`, `int`, `bool`). If a required field is missing, an error message is generated to indicate that the field was not provided.
+
+### 2. Type Checking
+
+In addition to checking for the presence of required fields, the decorator also validates the type of the data provided for each field. If the value provided for a field does not match the expected type, an error message is generated, specifying the expected type and the type that was actually received.
+
+For example, if a field is expected to be an integer but a string is provided, the error message will indicate that an integer was expected but a string was received. This type validation helps prevent issues caused by incorrect data formats or types being passed to the view.
+
+### 3. Error Response
+
+If any of the validation checks fail (either due to missing fields or incorrect types), the decorator returns an error response to the client. The response contains:
+- **Incorrect Fields**: A dictionary that lists each problematic field, with a message indicating either that the field is missing or that its type is incorrect.
+- **General Error Message**: A message stating that incorrect data was provided.
+- **HTTP Status Code**: The error response is sent with a `400 Bad Request` HTTP status code, indicating that the client provided invalid input.
+
+This structured error response ensures that the client receives clear feedback about what needs to be corrected in the request.
+
+### 4. Passing Control to the View
+
+If all required fields are present and have the correct data types, the decorator allows the request to proceed to the view function. The original view function is executed as normal, with the validated data being passed to it.
+
+### 5. Non-Intrusive Validation
+
+The decorator acts as a non-intrusive validation layer, meaning it doesn't alter the request data itself but simply checks whether it meets the expected requirements. If the request data is valid, the decorator has no impact on the flow of the program, allowing the view function to handle the request as intended.
+
+## Use Case
+
+The `validate_request_data` decorator is particularly useful in situations where strict validation of incoming data is required to prevent errors or security vulnerabilities. It can be applied to views where the request data must meet specific structural or type-based requirements before the view logic is executed.
+
+For instance, if an API endpoint requires certain fields such as `user_id` (integer) and `amount` (float), the decorator ensures that these fields are present and properly formatted, preventing invalid or harmful input from reaching the core business logic.
+
+## Conclusion
+
+The `validate_request_data` decorator provides an efficient way to validate incoming request data in Django views, ensuring that required fields are present and properly typed. By automatically returning structured error responses when validation fails, it helps improve the robustness and reliability of APIs and web applications.

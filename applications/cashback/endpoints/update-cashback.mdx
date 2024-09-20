@@ -1,0 +1,80 @@
+---
+id: update-cashback-api
+title: Update Cashback API
+sidebar_label: Update Cashback
+---
+
+# Update Cashback API
+
+## Overview
+
+The `Update Cashback` endpoint allows a merchant to update their cashback offer. This process involves setting a new cashback amount, which is then recorded in the cashback history.
+
+## Endpoints
+
+| Method | Path                          | Description                                         |
+|--------|-------------------------------|-----------------------------------------------------|
+| POST   | `/api/merchant/update-cashback/` | Updates the cashback amount for a merchant.         |
+
+## 1. POST /api/merchant/update-cashback/
+
+### Description
+
+This endpoint updates the cashback amount for a merchant user. It records the change in cashback history, marking the end of the previous offer and the start of the new one.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/update-cashback/`
+
+### Location in Django Files
+
+`views.py`
+
+### Authentication
+
+This endpoint requires authentication using a merchant token.
+
+### Permissions
+
+The user must be an authenticated merchant user.
+
+### Request Structure
+
+#### Body Parameters
+
+| Parameter | Necessity | Type    | Description                                            |
+|-----------|-----------|---------|--------------------------------------------------------|
+| `cashback`| Required  | Decimal | The new cashback amount (e.g., 2.5)                    |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field          | Type    | Description                                                                |
+|----------------|---------|----------------------------------------------------------------------------|
+| `new_cashback` | Decimal | The updated cashback amount.                                                |
+| `new_history`  | Object  | A dictionary representing the newly created cashback history entry.         |
+| `new_history.start_date` | String | The date the new cashback offer started (YYYY-MM-DD).             |
+| `new_history.end_date`   | String | The date the previous cashback offer ended (YYYY-MM-DD).          |
+| `new_history.amount`     | Decimal | The amount of the previous cashback offer.                        |
+
+### Error Handling
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+### Possible Status Codes
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to invalid data or a rule violation.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating the reason for the error, such as "Invalid data submitted" or "Cashback amount cannot exceed 40%." |

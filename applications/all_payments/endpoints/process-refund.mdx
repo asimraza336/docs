@@ -1,0 +1,88 @@
+---
+id: refund-transaction-api
+title: Refund Transaction API
+sidebar_label: Process Refund
+---
+
+# Refund Transaction API
+
+## Overview
+
+The `Refund Transaction` endpoint handles POST requests for processing refunds of specific transactions. The user must provide the `transaction_id` to process the refund.
+
+## Endpoints
+
+| Method | Path                                   | Description                            |
+|--------|----------------------------------------|----------------------------------------|
+| POST   | `/api/register/process_refund/`        | Processes a refund for a given transaction. |
+
+## 1. POST /api/register/process_refund/
+
+### Description
+
+This endpoint allows users to process a refund for a specific transaction by providing the `transaction_id`. The system verifies the transaction and processes the refund, returning the ID of the refunded transaction if successful.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/register/process_refund/`
+
+### Location in Django Files
+
+`views.py`
+
+### Authentication
+
+This endpoint requires authentication using a valid token, which should be passed as part of the request header.
+
+### Permissions
+
+This endpoint requires that the user has the necessary permissions to process refunds.
+
+### Request Structure
+
+#### Body Parameters
+
+| Parameter       | Necessity | Type    | Description                                                   |
+|-----------------|-----------|---------|---------------------------------------------------------------|
+| `transaction_id`| Required  | String  | The unique identifier of the transaction to be refunded.       |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field                  | Type    | Description                                                      |
+|------------------------|---------|------------------------------------------------------------------|
+| `refunded_transaction_id`| String  | The unique identifier of the transaction that was successfully refunded. |
+
+#### Error Response
+
+**Status Code:** `400 Bad Request`
+
+| Field                  | Type    | Description                                                       |
+|------------------------|---------|-------------------------------------------------------------------|
+| `error`                | String  | An error message indicating the reason the refund could not be processed. |
+| `invalid_transaction_id`| String  | Indicates that the provided transaction ID is invalid or already refunded. |
+
+### Error Handling
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+#### Possible Status Codes
+
+**Status Code:** `200 OK`
+
+This status code indicates that the refund was successfully processed.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the request could not be processed due to an invalid or missing `transaction_id` or because the transaction had already been refunded.
+
+**Status Code:** `401 Unauthorized`
+
+This status code indicates that the authentication token is invalid or missing.

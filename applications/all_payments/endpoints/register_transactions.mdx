@@ -1,0 +1,89 @@
+---
+id: refund-data-api
+title: Refund Data API
+sidebar_label: Refund Data
+---
+
+# Refund Data API
+
+## Overview
+
+The `Refund Data` endpoint handles POST requests for fetching transaction data associated with a specific register. The user must provide a valid `register_id` to retrieve the transaction list.
+
+## Endpoints
+
+| Method | Path                                    | Description                                              |
+|--------|-----------------------------------------|----------------------------------------------------------|
+| POST   | `/api/register/transaction/data/`       | Retrieves a list of transactions for a specific register. |
+
+## 1. POST /api/register/transaction/data/
+
+### Description
+
+This endpoint fetches transaction data for a register identified by the provided `register_id`. The list of transactions will include the transaction ID, user or transaction name, amount, status, and the date of the transaction.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/register/transaction/data/`
+
+### Location in Django Files
+
+`views.py`
+
+### Authentication
+
+This endpoint requires authentication using a valid token, which should be passed as part of the request header.
+
+### Permissions
+
+This endpoint requires the user to have appropriate permissions to retrieve transaction data.
+
+### Request Structure
+
+#### Body Parameters
+
+| Parameter     | Necessity | Type   | Description                                                   |
+|---------------|-----------|--------|---------------------------------------------------------------|
+| `register_id` | Required  | String | The unique identifier of the register whose transactions are being requested. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field                  | Type    | Description                                                      |
+|------------------------|---------|------------------------------------------------------------------|
+| `id`                   | Integer | The unique identifier of the transaction.                        |
+| `name`                 | String  | The name of the user or transaction.                             |
+| `transaction_amount`               | Float   | The amount of the transaction.                                   |
+| `status`               | String  | The status of the transaction (e.g., 'Completed', 'Pending').    |
+| `date`                 | String  | The date when the transaction occurred, in 'YYYY-MM-DD' format.  |
+
+#### Error Response
+
+**Status Code:** `400 Bad Request`
+
+| Field            | Type    | Description                                                   |
+|------------------|---------|---------------------------------------------------------------|
+| `error`          | String  | An error message specifying the issue encountered.            |
+| `invalid_id`     | String  | Indicates that the provided `register_id` is invalid or not found. |
+
+### Error Handling
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+#### Possible Status Codes
+
+**Status Code:** `200 OK`  
+This status code indicates that the transaction data was successfully retrieved.
+
+**Status Code:** `400 Bad Request`  
+This status code indicates that the request could not be processed, possibly due to an invalid or missing `register_id`.
+
+**Status Code:** `401 Unauthorized`  
+This status code indicates that the provided authentication token is invalid or missing.

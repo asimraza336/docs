@@ -1,0 +1,33 @@
+In our Django project, we maintain a monolithic architecture while ensuring clear separation of 
+applications to avoid direct dependencies between them. Each app is designed to function as a 
+standalone module, managing its own models, views, and business logic independently. 
+This ensures modularity and scalability while minimizing the risk of overlapping or tightly coupled code.
+
+## Application Isolation
+
+Each app serves a distinct purpose and is isolated to prevent any direct interaction with other apps. 
+For instance, an app responsible for handling transactions should not directly interact with models 
+from the merchant or consumer apps, aside from shared models like User or MerchantUser. 
+This separation is strictly enforced to ensure that each app can evolve independently without affecting others.
+
+## Shared Models and User Connections
+
+The only overlap between apps is through shared models, such as User or MerchantUser. 
+These models are centrally managed and referenced by multiple apps to ensure consistency 
+across the system. For example, a transaction might reference a User or MerchantUser, 
+but no other models should be directly connected across apps.
+
+## Service Providers and Model Data Providers
+
+Inter-app communication is managed through service providers or model data providers. 
+These providers act as intermediaries, ensuring that any data needed by one app from 
+another is accessed through clearly defined service layers. This design ensures that 
+no app directly manipulates or depends on another app's internal models or business logic, 
+further reinforcing the principle of isolation.
+Developers should refer to the relevant service provider documentation and shared 
+model references to understand how one app communicates with another while maintaining separation.
+This structure ensures that our project remains modular, scalable, and maintainable, 
+while allowing apps to interact only when absolutely necessary through well-defined channels. 
+
+
+For more details on specific examples, refer to the associated model files and service provider documentation.

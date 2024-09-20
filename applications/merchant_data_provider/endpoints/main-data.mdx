@@ -1,0 +1,156 @@
+---
+id: dashboard-api
+title: Dashboard API
+sidebar_label: Dashboard
+---
+
+# Dashboard API
+
+This document describes the API endpoint `DashboardAPIView`, which retrieves and aggregates all relevant data for a merchant user's dashboard.
+
+## Endpoint
+
+| Method | Path                        | Description                                           |
+|--------|-----------------------------|-------------------------------------------------------|
+| GET    | `/api/merchant/dashboard/data/`   | Retrieves the aggregated data for a merchant's dashboard. |
+
+## 1. GET /api/merchant/dashboard/data/
+
+### Description
+
+This endpoint retrieves and aggregates all relevant data for a merchant user's dashboard, providing a comprehensive overview of the merchant's account, transactions, and other key information.
+
+### Request Method
+
+`GET`
+
+### Path
+
+`/api/merchant/dashboard/data/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication.
+
+### Permissions
+
+- **Token Verification:** The endpoint requires a valid token for a `merchant` user.
+
+### Request Structure
+
+#### Headers
+
+| Header          | Necessity | Description                         |
+|-----------------|-----------|-------------------------------------|
+| `Authorization` | Required  | Bearer token for authenticating the merchant user. |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+The response contains a JSON object with the following structure:
+
+| Field                        | Type    | Description                                                                             |
+|------------------------------|---------|-----------------------------------------------------------------------------------------|
+| `merchant_profile`            | Object  | Contains details about the merchant's profile.                                           |
+| `status`                      | String  | The current status of the merchant account.                                              |
+| `transactions`                | Array   | A list of recent transactions related to the merchant account.                           |
+| `transaction_count`           | Integer | The total number of transactions associated with the merchant.                           |
+| `cashback_offer`              | Float   | The current cashback offer available to the merchant.                                    |
+| `cashback_history`            | Array   | A list of historical cashback records for the merchant.                                  |
+| `account`                     | Object  | Details about the merchant's bank account.                                               |
+| `pending_balance`             | Float   | The pending balance that has yet to be processed.                                        |
+| `dashboard_data`              | Object  | Aggregated statistics for the dashboard.                                                 |
+| `existing_non_admin_exists`   | Boolean | Indicates if there are any non-admin users associated with the merchant account.         |
+| `register_data`               | Object  | Information related to the merchant's register.                                          |
+| `store_locations`             | Array   | A list of store locations associated with the merchant.                                  |
+
+##### `merchant_profile` Object
+
+| Field      | Type   | Description                          |
+|------------|--------|--------------------------------------|
+| `full_name`| String | The full name of the merchant.       |
+
+##### `transactions` Array
+
+Each item in the `transactions` array is an object with the following fields:
+
+| Field              | Type    | Description                                                                 |
+|--------------------|---------|-----------------------------------------------------------------------------|
+| `id`               | Integer | The transaction ID.                                                         |
+| `name`             | String  | The name associated with the transaction.                                   |
+| `cashbackEarned`   | Float   | The amount of cashback earned in this transaction.                          |
+| `cashbackAmount`   | Float   | The total cashback amount.                                                  |
+| `processing_status`| String  | The processing status of the transaction (e.g., "successful", "pending").   |
+| `register`         | Integer | The register ID associated with the transaction.                            |
+| `amount`           | Float   | The total amount of the transaction.                                        |
+| `date`             | String  | The date of the transaction in `YYYY-MM-DD` format.                         |
+
+##### `cashback_history` Array
+
+Each item in the `cashback_history` array is an object with the following fields:
+
+| Field        | Type    | Description                                                     |
+|--------------|---------|-----------------------------------------------------------------|
+| `start_date` | String  | The start date of the cashback period in `YYYY-MM-DD` format.   |
+| `end_date`   | String  | The end date of the cashback period in `YYYY-MM-DD` format.     |
+| `amount`     | Float   | The amount of cashback accumulated during this period.          |
+
+##### `account` Object
+
+| Field          | Type   | Description                                           |
+|----------------|--------|-------------------------------------------------------|
+| `accountNumber`| String | The merchant's bank account number.                   |
+| `accountName`  | String | The name of the bank associated with the account.     |
+| `balance`      | String | The current balance in the account, formatted as a currency string. |
+| `lastChecked`  | String | The last time the account balance was checked, formatted as a string. |
+| `logo`         | String | URL to the bank's logo.                               |
+
+##### `dashboard_data` Object
+
+| Field              | Type    | Description                                |
+|--------------------|---------|--------------------------------------------|
+| `transactions`     | String  | The total amount of transactions in the last 30 days.          |
+| `cashbackEarned`   | String  | The total amount of cashback earned in the last 30 days.       |
+| `cashbackRedeemed` | String  | The total amount of cashback redeemed in the last 30 days.     |
+| `totalUsers`       | String  | The total number of users in the last 30 days.                 |
+
+##### `register_data` Object
+
+| Field        | Type    | Description                                        |
+|--------------|---------|----------------------------------------------------|
+| `username`   | String  | The username associated with the merchant's register. |
+| `registerPin`| Integer | The PIN code for the register.                      |
+| `registerCount` | Integer | The number of registers associated with the merchant. |
+
+##### `store_locations` Array
+
+Each item in the `store_locations` array is an object with the following fields:
+
+| Field        | Type    | Description                                                        |
+|--------------|---------|--------------------------------------------------------------------|
+| `name`       | String  | The name of the store.                                             |
+| `address`    | String  | The address of the store.                                          |
+| `storePhoto` | String  | URL to a photo of the store.                                       |
+| `description`| String  | A brief description of the store.                                  |
+| `type`       | String  | The type of the store (e.g., "Retail", "Online").                  |
+| `number`     | String  | The contact phone number for the store.                            |
+| `website`    | String  | The store's website URL.                                           |
+| `email`      | String  | The contact email for the store.                                   |
+| `status`     | String  | The current status of the store (e.g., "Active", "Inactive").      |
+
+### Error Handling
+
+Errors in this API are handled by the decorators and services, with standard Django error responses being used for any issues related to token verification or data retrieval.
+
+### Notes
+
+- The data returned includes a comprehensive overview of the merchant's profile, transactions, cashback details, and other key account information.
+- The `Authorization` header must contain a valid token for the request to succeed.
+- This endpoint provides all necessary information for populating a merchant user's dashboard in a frontend application.

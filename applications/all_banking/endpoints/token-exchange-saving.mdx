@@ -1,0 +1,180 @@
+---
+id: exchanging-tokens
+title: Exchanging Tokens
+sidebar_label: Token Exchange
+---
+
+# Exchanging Tokens
+
+## Overview
+
+This section provides an overview of the endpoints used to exchange and save bank account information for both merchant and consumer users. These endpoints are essential for securely storing the bank account details provided by users through the Plaid service.
+
+## Endpoints
+
+| Method | Path                                | Description                                                          |
+|--------|-------------------------------------|----------------------------------------------------------------------|
+| POST   | `/api/merchant/token/exchange/`         | Handles the retrieval and saving of bank account information for a merchant user. |
+| POST   | `/api/appUser/token/exchange/`          | Handles the retrieval and saving of bank account information for a consumer user. |
+
+## 1. POST /merchant/token/exchange/
+
+### Description
+
+This endpoint is used to exchange and save bank account information for a merchant user. It processes the incoming request, verifies the merchant's token, and saves the bank account details using the BankAccountService.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/merchant/token/exchange/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication. The user must be logged in as a merchant user and have the appropriate permissions.
+
+### Request Structure
+
+#### Headers
+
+| Header          | Necessity | Description                                  |
+|-----------------|-----------|----------------------------------------------|
+| `Authorization` | Required  | Bearer token for authentication              |
+| `Content-Type`  | Required  | `application/json`                           |
+
+#### Body Parameters
+
+> **Frontend Note:** This data will all come directly from the plaid Link.
+
+
+| Parameter            | Necessity | Type    | Description                                                                 |
+|----------------------|-----------|---------|-----------------------------------------------------------------------------|
+| `public_token`       | Required  | String  | The public token received from Plaid.                                       |
+| `metadata`           | Required  | Object  | Object containing detailed information about the bank accounts and institution. |
+| `metadata.institution.name`         | Required  | String  | The name of the financial institution (e.g., "Wells Fargo").                  |
+| `metadata.institution.institution_id` | Required  | String  | The ID of the financial institution (e.g., "ins_4").                          |
+| `metadata.accounts`   | Required  | Array   | Array of objects where each object contains details about an account.        |
+| `metadata.accounts[i].id`           | Required  | String  | The ID of the account in Plaid.                                              |
+| `metadata.accounts[i].name`         | Required  | String  | The name of the account (e.g., "Plaid Checking").                            |
+| `metadata.accounts[i].mask`         | Required  | String  | The last four digits of the account number.                                  |
+| `metadata.accounts[i].type`         | Required  | String  | The type of the account (e.g., "depository").                                |
+| `metadata.accounts[i].subtype`      | Required  | String  | The subtype of the account (e.g., "checking", "savings").                    |
+| `metadata.link_session_id`          | Required  | String  | The session ID for the Plaid Link session.                                   |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field         | Type   | Description                                              |
+|---------------|--------|----------------------------------------------------------|
+| `accountNumber` | String | The account number of the saved bank account.            |
+| `accountName`   | String | The name of the saved bank account.                      |
+| `bankName`      | String | The name of the bank.                                    |
+| `accountType`   | String | The type of the bank account (e.g., "Checking").         |
+| `isPrimary`     | Boolean| Indicates whether this is the primary account.           |
+| `balance`       | String | The balance of the saved bank account.                   |
+| `lastChecked`   | String | The timestamp of the last balance check.                 |
+| `logo`          | String | URL to the bank's logo.                                  |
+| `id`            | Integer| The unique identifier of the saved bank account.         |
+
+---
+
+## 2. POST /appUser/token/exchange/
+
+### Description
+
+This endpoint is used to exchange and save bank account information for a consumer user. It processes the incoming request, verifies the consumer's token, and saves the bank account details using the BankAccountService.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/appUser/token/exchange/`
+
+### Location in Django Files
+
+`app_name/views.py`
+
+### Authentication
+
+This endpoint requires authentication. The user must be logged in as a consumer user and have the appropriate permissions.
+
+### Request Structure
+
+#### Headers
+
+| Header          | Necessity | Description                                  |
+|-----------------|-----------|----------------------------------------------|
+| `Authorization` | Required  | Bearer token for authentication              |
+| `Content-Type`  | Required  | `application/json`                           |
+
+#### Body Parameters
+
+> **Frontend Note:** This data will all come directly from the plaid Link.
+
+| Parameter            | Necessity | Type    | Description                                                                 |
+|----------------------|-----------|---------|-----------------------------------------------------------------------------|
+| `public_token`       | Required  | String  | The public token received from Plaid.                                       |
+| `metadata`           | Required  | Object  | Object containing detailed information about the bank accounts and institution. |
+| `metadata.institution.name`         | Required  | String  | The name of the financial institution (e.g., "Wells Fargo").                  |
+| `metadata.institution.institution_id` | Required  | String  | The ID of the financial institution (e.g., "ins_4").                          |
+| `metadata.accounts`   | Required  | Array   | Array of objects where each object contains details about an account.        |
+| `metadata.accounts[i].id`           | Required  | String  | The ID of the account in Plaid.                                              |
+| `metadata.accounts[i].name`         | Required  | String  | The name of the account (e.g., "Plaid Checking").                            |
+| `metadata.accounts[i].mask`         | Required  | String  | The last four digits of the account number.                                  |
+| `metadata.accounts[i].type`         | Required  | String  | The type of the account (e.g., "depository").                                |
+| `metadata.accounts[i].subtype`      | Required  | String  | The subtype of the account (e.g., "checking", "savings").                    |
+| `metadata.link_session_id`          | Required  | String  | The session ID for the Plaid Link session.                                   |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field         | Type   | Description                                              |
+|---------------|--------|----------------------------------------------------------|
+| `accountNumber` | String | The account number of the saved bank account.            |
+| `accountName`   | String | The name of the saved bank account.                      |
+| `bankName`      | String | The name of the bank.                                    |
+| `accountType`   | String | The type of the bank account (e.g., "Checking").         |
+| `isPrimary`     | Boolean| Indicates whether this is the primary account.           |
+| `balance`       | String | The balance of the saved bank account.                   |
+| `lastChecked`   | String | The timestamp of the last balance check.                 |
+| `logo`          | String | URL to the bank's logo.                                  |
+| `id`            | Integer| The unique identifier of the saved bank account.         |
+
+---
+
+## Error Handling
+
+When interacting with our API, you may encounter various HTTP status codes that indicate the success or failure of your request. Below is a list of possible status codes and their meanings.
+
+### 400 Bad Request
+
+This status code indicates that the server could not understand the request due to invalid syntax. This typically occurs when validation fails for one or more fields.
+
+#### Error Response Structure
+
+Errors in this API are typically formatted as follows:
+
+**Status Code:** `400 Bad Request`
+
+| **Field**       | **Type** | **Description**                                                     |
+|:---------------:|:--------:|:-------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "an error occurred on our end." |
+
+---
+
+> **Note:** Proper error handling in your client application is crucial for providing a smooth user experience. Ensure that error messages are properly displayed to the user and that appropriate actions are taken in response to different error codes.

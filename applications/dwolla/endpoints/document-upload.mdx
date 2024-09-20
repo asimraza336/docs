@@ -1,0 +1,82 @@
+# Upload Documents for Verification API
+
+This document describes the API endpoint `UserDocumentsForVerificationAPIView`, which handles the upload of documents for verification purposes.
+
+## Endpoint
+
+| Method | Path                                  | Description                                           |
+|--------|---------------------------------------|-------------------------------------------------------|
+| POST   | `/api/merchant/document/upload/`      | Uploads documents for the verification of a merchant user. |
+
+## 1. POST /api/merchant/document/upload/
+
+### Description
+
+This endpoint allows a merchant user to upload documents necessary for verification. The uploaded documents are associated with either the user or an owner.
+
+### Request Method
+
+`POST`
+
+### Path
+
+`/api/merchant/document/upload/`
+
+### Location in Django Files
+
+`clavaaBackend/views.py`
+
+### Authentication
+
+This endpoint requires authentication with a valid merchant token.
+
+### Permissions
+
+The user must be an authenticated merchant.
+
+### Request Structure
+
+#### Headers
+
+| Header         | Necessity | Description                         |
+|----------------|-----------|-------------------------------------|
+| `Authorization`| Required  | Bearer token of the authenticated user. |
+| `Content-Type` | Required  | `application/json`                  |
+
+#### Body Parameters
+
+The body should be a JSON array where each element is a dictionary representing a document to be uploaded. Each dictionary has the following structure:
+
+| Parameter    | Necessity | Type   | Description                                                   |
+|--------------|-----------|--------|---------------------------------------------------------------|
+| `file`       | Required  | String | The uploaded file object encoded as a base64 string.          |
+| `serverName` | Required  | String | The name of the server the document is associated with (e.g., "owner", "user"). |
+| `id`         | Optional  | Integer| The ID of the owner if the document is associated with an owner. |
+| `type`       | Required  | String | The type of document (e.g., "license", "idCard", "passport").  |
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `200 OK`
+
+| Field   | Type    | Description                                                        |
+|---------|---------|--------------------------------------------------------------------|
+| `status`| String  | The verification status of the merchant user. Possible value: "documentPending". |
+
+### Error Handling
+
+Errors in this API are typically returned with a specific status code and an object containing details about the error.
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that an unexpected error occurred on the server's end.
+
+##### Example: Internal Server Error
+
+This error occurs when something goes wrong on the server that isn't related to the user's input.
+
+| **Field**       | **Type** | **Description**                                                     |
+|-----------------|----------|---------------------------------------------------------------------|
+| `error`         | Object   | The error object containing details about the error.               |
+| `error.error`   | String   | A descriptive message indicating that "An error occurred on our end." |

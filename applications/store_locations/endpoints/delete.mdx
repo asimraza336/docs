@@ -1,0 +1,71 @@
+---
+id: delete-merchant-location-api
+title: Delete Merchant Location API
+sidebar_label: Delete Merchant Location
+---
+
+# Delete Merchant Location API
+
+## Overview
+
+The `Delete Merchant Location` endpoint allows a merchant to delete an existing location associated with their business. The location is identified by its unique ID, which is part of the URL path.
+
+## Endpoints
+
+| Method | Path                                     | Description                                          |
+|--------|------------------------------------------|------------------------------------------------------|
+| DELETE | `/api/merchant/locations/<int:id>/`       | Deletes an existing merchant location.               |
+
+## 1. DELETE /api/merchant/locations/int:id/
+
+### Description
+
+This endpoint deletes an existing merchant location based on the provided location ID. The ID of the location to be deleted is included directly in the URL path.
+
+### Request Method
+
+`DELETE`
+
+### Path
+
+`/api/merchant/locations/<int:id>/`
+
+### URL Path Parameters
+
+| Parameter | Necessity | Type    | Description                                          |
+|-----------|-----------|---------|------------------------------------------------------|
+| `id`      | Required  | Integer | The unique ID of the location to be deleted.         |
+
+### Location in Django Files
+
+`views.py`
+
+### Authentication
+
+This endpoint requires authentication using a merchant token.
+
+### Permissions
+
+The user must be an authenticated merchant.
+
+### Response Structure
+
+#### Success Response
+
+**Status Code:** `204 No Content`
+
+| Field    | Type    | Description                                    |
+|----------|---------|------------------------------------------------|
+| `message`| String  | A message indicating that the location was successfully deleted. |
+
+### Error Handling
+
+When interacting with this endpoint, various HTTP status codes may be returned to indicate the outcome of the request.
+
+### Possible Status Codes
+
+**Status Code:** `400 Bad Request`
+
+This status code indicates that the server could not process the request due to missing or invalid ID parameter.
+
+
